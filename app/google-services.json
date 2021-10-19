@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "64241124634",
+    "project_id": "tactic-add7c",
+    "storage_bucket": "tactic-add7c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:64241124634:android:23e230939e1d43cc6f18a3",
+        "android_client_info": {
+          "package_name": "hu.bme.aut.tactic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "64241124634-pam0jkt6088q93vqsa8gpnr5mt803fci.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXRDp2rMgoJwXiDlkZQ34hNklPeOreBIQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "64241124634-pam0jkt6088q93vqsa8gpnr5mt803fci.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
