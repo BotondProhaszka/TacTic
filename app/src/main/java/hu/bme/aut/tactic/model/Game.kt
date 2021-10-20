@@ -1,21 +1,29 @@
 package hu.bme.aut.tactic.model
 
-import android.os.DropBoxManager
 import android.util.Log
-import hu.bme.aut.tactic.fragments.PLAYER
-import hu.bme.aut.tactic.fragments.SIGN
 
-enum class ROUND {INIT,RED_BASE, BLUE_BASE, GAME, DRAW, BLUE_WIN, RED_WIN}
+enum class ROUND {INIT,FIRST_BASE, SEC_BASE, GAME, DRAW, BLUE_WIN, RED_WIN}
+
+enum class PLAYER {
+    RED, BLUE
+
+}
+
+enum class SIGN {
+    BASE, ONE, TWO, THREE, FOUR
+}
 
 object Game {
         private var instance = Game
 
-        lateinit var map : ArrayList<ArrayList<Field>>
+        private lateinit var map : ArrayList<ArrayList<Field>>
 
         private var mapWidth = 0
         private var mapHeight = 0
-        private var round: ROUND = ROUND.INIT
-        private var next_player : PLAYER = PLAYER.RED
+        private var round: ROUND = ROUND.FIRST_BASE
+        private var actual_player : PLAYER = PLAYER.RED
+
+        private var clickedFrom: Field? = null
 
         fun getInstance(): Game {
 
@@ -35,12 +43,18 @@ object Game {
             for(i in 0..height){
                 val row = ArrayList<Field>(width)
                 for (j in 0..width){
-                    Log.d("Bugfix", "${i}:${j}")
-                    row.add(Field())
+                    row.add(Field(i, j))
                 }
                 map.add(row)
             }
         }
+
+        fun setFirstPlayer(player: PLAYER){
+            actual_player = player
+        }
+
+        @JvmName("getMap1")
+        fun getMap() : ArrayList<ArrayList<Field>> {return map}
 
         fun getMapWidth(): Int {
             return mapWidth
@@ -50,19 +64,54 @@ object Game {
             return mapHeight
         }
 
+        fun changePlayer(){
+            actual_player = when(actual_player){
+                PLAYER.BLUE -> PLAYER.RED
+                PLAYER.RED -> PLAYER.BLUE
+            }
+        }
 
-        fun clickedOn(x: Int, y: Int): FieldStateObject{
-            when(next_player){
-                PLAYER.RED-> {
-                    map[x][y].setFieldStateObject(FieldStateObject(next_player, SIGN.BASE))
-                    next_player = PLAYER.BLUE
+        fun getOtherPlayer(player: PLAYER): PLAYER{
+            return when(player){
+                PLAYER.RED -> PLAYER.BLUE
+                PLAYER.BLUE -> PLAYER.RED
+            }
+        }
+
+        fun clickedOn(x: Int, y: Int): Field {
+            var result = Field(x, y, actual_player, SIGN.FOUR, false)
+            when (round) {
+                ROUND.FIRST_BASE -> {
+
+
+                    map[x][y] = Field(x, y, actual_player, SIGN.BASE, false)
+                    changePlayer()
+                    round = ROUND.SEC_BASE
+                    return map[x][y]
                 }
-                PLAYER.BLUE-> {
-                    map[x][y].setFieldStateObject(FieldStateObject(next_player, SIGN.BASE))
-                    next_player = PLAYER.RED
+                ROUND.SEC_BASE -> {
+                    result = Field(x, y, actual_player, SIGN.BASE, false)
+                    map[x][y] = result
+                    changePlayer()
+                    round = ROUND.GAME
+                    return result
                 }
+                ROUND.GAME -> {
+                    if (map[x][y].isEmpty()) {
+                        Log.d("Bugfix", "GAME")
+                        result = Field(x, y, actual_player, SIGN.ONE, false)
+                        map[x][y] = result
+                        changePlayer()
+                        return result
+                    }
+
+
+                }
+
             }
 
-            return map[x][y].getFieldStateObject()
+            return result
         }
+
+
     }

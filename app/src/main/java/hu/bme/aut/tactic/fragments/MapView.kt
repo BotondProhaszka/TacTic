@@ -9,19 +9,15 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import hu.bme.aut.tactic.R
-import hu.bme.aut.tactic.model.FieldStateObject
+import hu.bme.aut.tactic.model.Field
 import hu.bme.aut.tactic.model.Game
+import hu.bme.aut.tactic.model.PLAYER
+import hu.bme.aut.tactic.model.SIGN
 import kotlin.math.ceil
 
 val MIN_CELL_SIZE = 80f
 
-enum class PLAYER {
-    RED, BLUE
-}
 
-enum class SIGN {
-    BASE, ONE, TWO, THREE, FOUR
-}
 
 class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
 
@@ -34,7 +30,6 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
 
     private var game = Game.getInstance()
 
-    private var cells = ArrayList<ArrayList<FieldStateObject?>>()
 
     private var canvas: Canvas? = null
 
@@ -48,51 +43,52 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
         paint.strokeWidth = 6F
         R.color.asphalt.also { paint.color = it }
 
-        for(i in 0.. mapWidth) {
-            var row = ArrayList<FieldStateObject?>()
-            for (j in 0..mapHeight) {
-                var b = null
-                row.add(b)
-            }
-            cells.add(row)
-        }
+
 
     }
 
-    override fun onDraw(canvas: Canvas){
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         this.canvas = canvas
 
 
-        if(cellWidth == 0F) {
+        if (cellWidth == 0F) {
             cellWidth = (width - correct) / mapWidth.toFloat()
-            if(cellWidth < MIN_CELL_SIZE) {
+            if (cellWidth < MIN_CELL_SIZE) {
                 cellWidth = MIN_CELL_SIZE
 
             }
         }
-        if(cellHeight == 0F) {
+        if (cellHeight == 0F) {
             cellHeight = (height - correct) / (mapHeight.toFloat())
-            if(cellHeight < MIN_CELL_SIZE)
+            if (cellHeight < MIN_CELL_SIZE)
                 cellHeight = MIN_CELL_SIZE
         }
 
 
         R.color.asphalt.also { paint.color = it }
-        for(i in 0..mapWidth+1) //fuggoleges
-            canvas.drawLine((i * cellWidth) + (correct/2), (correct/2), (i*cellWidth) + (correct/2), height.toFloat() - (correct/2), paint)
-        for(i in 0..mapHeight+1) //vizszintes
-            canvas.drawLine((correct/2), (i* cellHeight) + (correct/2), width.toFloat() - (correct/2), (i * cellHeight) + (correct/2), paint)
+        for (i in 0..mapWidth + 1) //fuggoleges
+            canvas.drawLine(
+                (i * cellWidth) + (correct / 2),
+                (correct / 2),
+                (i * cellWidth) + (correct / 2),
+                height.toFloat() - (correct / 2),
+                paint
+            )
+        for (i in 0..mapHeight + 1) //vizszintes
+            canvas.drawLine(
+                (correct / 2),
+                (i * cellHeight) + (correct / 2),
+                width.toFloat() - (correct / 2),
+                (i * cellHeight) + (correct / 2),
+                paint
+            )
 
-        for(i in 0.. mapWidth) {
-            for (j in 0..mapHeight){
-                if(cells[i][j] != null) {
-                    drawInPos(i, j, cells[i][j])
-                    Log.d("Bugfix", "${i}:${j}")
-
-                }
-            }
-        }
+        //cellak kirajzolasa
+        var map = game.getMap()
+        for (a in map)
+            for (f in a)
+                draw(f)
     }
 
 
@@ -116,10 +112,8 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
                 val x = ceil(xTemp.toDouble()).toInt()
                 val y = ceil(yTemp.toDouble()).toInt()
                 if(x <= mapWidth && y <= mapHeight && x > 0 && y > 0) {
-                    var cellObject = game.clickedOn(x,y)
-                    cells[x][y] = cellObject
-                    Log.d("Bugfix", "UP: ${x}:${y}")
-                    drawInPos(x, y, cellObject)
+                    var field = game.clickedOn(x,y)
+                    //draw(field)
                     this.invalidate()
                 }
             }
@@ -131,31 +125,48 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
 
 
 
-    private fun drawInPos(x: Int, y: Int, fso: FieldStateObject?){
+    @SuppressLint("ResourceAsColor")
+    private fun draw(field: Field){
+        var x = field.x
+        var y = field.y
         R.color.asphalt.also { paint.color = it }
-        when(fso?.player){
-            PLAYER.RED -> R.color.player_red.also { paint.color = it }
-            PLAYER.BLUE -> R.color.player_blue.also { paint.color = it }
-        }
-        var sign = "A"
-        when(fso?.sign){
-            SIGN.ONE -> sign = "1"
+
+        var sign = ""
+        when(field.getSign()){
+            SIGN.ONE -> {
+                sign = "1"
+            }
             SIGN.TWO -> sign = "2"
             SIGN.THREE -> sign = "3"
             SIGN.FOUR -> sign = "4"
             SIGN.BASE -> {
-                sign = when(fso?.player){
+                sign = when(field.getPlayer()){
                     PLAYER.RED -> "X"
                     PLAYER.BLUE -> "O"
+                    else -> "."
                 }
             }
+            else-> return
 
         }
 
-        Log.d("Bugfix", "drawInPos")
+
+        when(field.getPlayer()){
+            PLAYER.RED -> {
+                Log.d("Bugfix", "Color.RED")
+                paint.color  = R.color.player_red
+            }
+            PLAYER.BLUE -> {
+                Log.d("Bugfix", "Color.BLUE")
+                paint.color = R.color.player_red
+            }
+        }
         paint.textSize = 100F
+        if(field.getHighlighted()){
+            paint.color  = R.color.white
+            canvas?.drawRect((x-1) * cellWidth + correct,  (y-1) * cellHeight + correct, x*cellWidth,y*cellHeight, paint )
+        }
         canvas?.drawText(sign, (x-0.85F) * cellWidth + correct,  (y- 0.3f)*cellHeight, paint)
-        //canvas?.drawRect((x-1) * cellWidth + correct,  (y-1) * cellHeight + correct, x*cellWidth,y*cellHeight, paint )
     }
 
 }

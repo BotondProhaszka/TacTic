@@ -1,26 +1,39 @@
 package hu.bme.aut.tactic.model
 
-enum class PLAYER_ON_FIELD {
-    EMPTY, RED, BLUE
-}
-enum class FIELD_HIGHLITED {
-    TRUE, FALSE
-}
 
-class Field{
-    private lateinit var fieldStateObject : FieldStateObject
+class Field(var x: Int, var y: Int) {
+    private var player: PLAYER? = null
+    private var sign: SIGN? = null
+    private var highlighted: Boolean = false
 
-    private var playerOnField: PLAYER_ON_FIELD = PLAYER_ON_FIELD.EMPTY
-    private var highlited: FIELD_HIGHLITED = FIELD_HIGHLITED.FALSE
-
-    fun getPlayerOnField() : PLAYER_ON_FIELD{
-        return playerOnField
+    constructor(x: Int, y: Int, player: PLAYER?, sign: SIGN?, highlighted: Boolean) : this(x, y) {
+        this.player = player
+        this.sign = sign
+        this.highlighted = highlighted
     }
 
-    fun setFieldStateObject(fddo: FieldStateObject){
-        fieldStateObject = fddo
+    fun getPlayer() : PLAYER? { return player }
+    fun getSign() : SIGN? { return sign }
+    fun getHighlighted() : Boolean { return highlighted }
+
+    @JvmName("setPlayer1")
+    fun setPlayer(player: PLAYER) {
+        this.player = player
     }
-    fun getFieldStateObject() :FieldStateObject{
-        return fieldStateObject
+
+    @JvmName("setSign1")
+    fun setSign(sign: SIGN) {
+        this.sign = sign
     }
+
+    fun setHighlighted(highlighted: Boolean) {
+        this.highlighted = highlighted
+    }
+
+    fun samePlace(fso: Field): Boolean {
+        return (fso.x == this.x && fso.y == this.y)
+    }
+
+    fun isEmpty() : Boolean {return (player == null)}
+
 }
