@@ -1,7 +1,9 @@
 package hu.bme.aut.tactic.fragments
 
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -18,19 +20,18 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 
 
-class SettingsFragment: DialogFragment() {
+class SettingsFragment: DialogFragment(), AdapterView.OnItemSelectedListener{
     private lateinit var binding: SettingsFragmentBinding
-    private var spinXValue = 4
-    private val wArray = ArrayList<Int>()
-    private var spinYValue = 4
-    private val hArray = ArrayList<Int>()
+    private var spinXValue = 5
+    private val intArray = ArrayList<Int>()
+    private var spinYValue = 5
 
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = SettingsFragmentBinding.inflate(inflater, container, false)
 
         when (this.context?.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)) {
@@ -62,13 +63,31 @@ class SettingsFragment: DialogFragment() {
             }
 
         }
-        binding.spinnerX.onItemSelectedListener=object :AdapterView.OnItemSelectedListener{
-            override fun onNothingSelected(p0: AdapterView<*>?) { }
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) { spinXValue = wArray[p2] }
+
+        for(i in 4..9){
+            intArray.add(i)
         }
-        binding.spinnerY.onItemSelectedListener=object :AdapterView.OnItemSelectedListener{
-            override fun onNothingSelected(p0: AdapterView<*>?) { }
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) { spinYValue = hArray[p2] }
+        val aa = ArrayAdapter(this.requireContext(), android.R.layout.simple_spinner_dropdown_item, intArray)
+        binding.spinnerX.adapter = aa
+        binding.spinnerY.adapter = aa
+        binding.spinnerX.onItemSelectedListener = this
+        binding.spinnerY.onItemSelectedListener = this
+
+        val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
+        val xPos = sp.getInt("MAP_WIDTH_POS", 0)
+        val yPos = sp.getInt("MAP_HEIGHT_POS", 0)
+
+        binding.spinnerX.setSelection(xPos)
+        binding.spinnerY.setSelection(yPos)
+
+        binding.btnApply.setOnClickListener{
+            val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
+            val editor: SharedPreferences.Editor = sp.edit()
+            editor.putInt("MAP_WIDTH_POS", binding.spinnerX.selectedItemPosition)
+            editor.putInt("MAP_HEIGHT_POS", binding.spinnerY.selectedItemPosition)
+            editor.putInt("MAP_WIDTH_VAL", binding.spinnerX.selectedItem as Int)
+            editor.putInt("MAP_HEIGHT_VAL", binding.spinnerY.selectedItem as Int)
+            editor.apply()
         }
 
 
@@ -76,9 +95,15 @@ class SettingsFragment: DialogFragment() {
     }
 
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
+    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+        if(p0?.id == R.id.spinnerX)
+            spinXValue = intArray[p2]
+        else if(p0?.id == R.id.spinnerY)
+            spinYValue = intArray[p2]
+    }
 
+    override fun onNothingSelected(p0: AdapterView<*>?) {
+        TODO("Not yet implemented")
     }
 }

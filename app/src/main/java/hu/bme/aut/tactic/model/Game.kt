@@ -1,6 +1,12 @@
 package hu.bme.aut.tactic.model
 
+import android.app.GameManager
+import android.media.Image
 import android.util.Log
+import hu.bme.aut.tactic.R
+import hu.bme.aut.tactic.activities.GameActivity
+import hu.bme.aut.tactic.databinding.ActivityGameBinding
+import hu.bme.aut.tactic.databinding.ActivityMenuBinding
 
 enum class ROUND {INIT,FIRST_BASE, SEC_BASE, GAME, DRAW, BLUE_WIN, RED_WIN}
 
@@ -9,8 +15,40 @@ enum class PLAYER {
 
 }
 
-enum class SIGN {
-    BASE, ONE, TWO, THREE, FOUR
+enum class SIGN (val value: Int) {
+    BASE(0),
+    ONE(1),
+    TWO(2),
+    THREE(3),
+    FOUR(4),
+    FIVE(5),
+    SIX(6);
+    fun getMinus(rightSide: SIGN): SIGN {
+        return when(this.value - rightSide.value){
+            0 -> ONE
+            1 -> ONE
+            2 -> TWO
+            3 -> THREE
+            4 -> FOUR
+            5 -> FIVE
+            else -> ONE
+        }
+    }
+    fun minus(rightSide: SIGN): Int {
+        return this.value - rightSide.value
+    }
+
+    fun getNext() : SIGN {
+        return when(value){
+            0 -> ONE
+            1 -> TWO
+            2 -> THREE
+            3 -> FOUR
+            4 -> FIVE
+            5 -> SIX
+            else -> BASE
+        }
+    }
 }
 
 object Game {
@@ -21,7 +59,7 @@ object Game {
         private var mapWidth = 0
         private var mapHeight = 0
         private var round: ROUND = ROUND.FIRST_BASE
-        private var actual_player : PLAYER = PLAYER.RED
+        private var actual_player : PLAYER = PLAYER.BLUE
 
         private var clickedFrom: Field? = null
 
@@ -34,6 +72,11 @@ object Game {
                 }
             }
             return instance
+        }
+
+        fun startNewGame(width: Int, height: Int){
+            round = ROUND.FIRST_BASE
+            setMapSize(width, height)
         }
 
         fun setMapSize(width: Int, height: Int) {
@@ -52,10 +95,18 @@ object Game {
         fun setFirstPlayer(player: PLAYER){
             actual_player = player
         }
+        fun setRandomFirstPlayer(){
+            val rand = (0..1).random()
+            actual_player = when(rand) {
+                0 -> PLAYER.BLUE
+                1 -> PLAYER.RED
+                else -> PLAYER.RED
+            }
+        }
 
         @JvmName("getMap1")
         fun getMap() : ArrayList<ArrayList<Field>> {return map}
-
+        fun getActualPlayer(): PLAYER { return actual_player }
         fun getMapWidth(): Int {
             return mapWidth
         }
@@ -64,54 +115,100 @@ object Game {
             return mapHeight
         }
 
-        fun changePlayer(){
-            actual_player = when(actual_player){
-                PLAYER.BLUE -> PLAYER.RED
-                PLAYER.RED -> PLAYER.BLUE
-            }
+        private fun changePlayer(){
+            var tv = R.id.tvCurrentTurn
+            actual_player = getOtherPlayer(actual_player)
+            removeClickedFrom()
         }
 
-        fun getOtherPlayer(player: PLAYER): PLAYER{
+        private fun getOtherPlayer(player: PLAYER): PLAYER{
             return when(player){
                 PLAYER.RED -> PLAYER.BLUE
                 PLAYER.BLUE -> PLAYER.RED
             }
         }
 
-        fun clickedOn(x: Int, y: Int): Field {
-            var result = Field(x, y, actual_player, SIGN.FOUR, false)
+        fun playerWins(winner: PLAYER){
+
+        }
+
+        fun clickedOn(x: Int, y: Int) {
+            Log.d("Bugfix", "${x}:${y}")
+
+            if(round != ROUND.FIRST_BASE && round != ROUND.SEC_BASE)
+                if(!hasCorrectNeighbour(x,y)) {
+                    if(clickedFrom != null)
+                        removeClickedFrom()
+                    return
+                }
             when (round) {
                 ROUND.FIRST_BASE -> {
-
-
                     map[x][y] = Field(x, y, actual_player, SIGN.BASE, false)
                     changePlayer()
                     round = ROUND.SEC_BASE
-                    return map[x][y]
+                    return
                 }
                 ROUND.SEC_BASE -> {
-                    result = Field(x, y, actual_player, SIGN.BASE, false)
-                    map[x][y] = result
+                    map[x][y] = Field(x, y, actual_player, SIGN.BASE, false)
                     changePlayer()
                     round = ROUND.GAME
-                    return result
+                    return
                 }
                 ROUND.GAME -> {
+
                     if (map[x][y].isEmpty()) {
-                        Log.d("Bugfix", "GAME")
-                        result = Field(x, y, actual_player, SIGN.ONE, false)
-                        map[x][y] = result
+                        map[x][y] = Field(x, y, actual_player, SIGN.ONE, false)
                         changePlayer()
-                        return result
+                        return
+                    }
+                    else if(clickedFrom == null){
+                        if(map[x][y].getPlayer() == actual_player) {
+                            map[x][y].setHighlighted(true)
+                            clickedFrom = map[x][y]
+                            return
+                        }
                     }
 
-
+                    else if(clickedFrom?.samePlace(map[x][y]) == true){
+                        if(map[x][y].increaseSignValue())
+                            changePlayer()
+                        return
+                    }
+                    else if(clickedFrom?.getPlayer() == map[x][y].getPlayer()){
+                        clickedFrom?.setHighlighted(false)
+                        map[x][y].setHighlighted(true)
+                        clickedFrom = map[x][y]
+                        return
+                    }
+                    else{
+                        if(map[x][y].attackFrom( Field(clickedFrom))) {
+                            changePlayer()
+                            return
+                        }
+                    }
                 }
-
             }
-
-            return result
         }
 
+        private fun hasCorrectNeighbour(x: Int, y: Int): Boolean{
+            if(x in 2..mapWidth)
+                if(map[x-1][y].getPlayer() == actual_player)
+                    return true
+            if(x in 1 until mapWidth)
+                if(map[x+1][y].getPlayer() == actual_player)
+                    return true
+            if(y in 2..mapHeight)
+                if(map[x][y-1].getPlayer() == actual_player)
+                    return true
+            if(y in 1 until mapHeight)
+                if(map[x][y+1].getPlayer() == actual_player)
+                    return true
+            return false
+        }
+
+        private fun removeClickedFrom(){
+            clickedFrom?.setHighlighted(false)
+            clickedFrom = null
+        }
 
     }

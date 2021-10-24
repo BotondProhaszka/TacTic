@@ -17,8 +17,7 @@ import kotlin.math.ceil
 
 val MIN_CELL_SIZE = 80f
 
-
-
+@SuppressLint("ResourceAsColor")
 class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
 
     private val paint = Paint()
@@ -31,22 +30,18 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
     private var game = Game.getInstance()
 
 
-    private var canvas: Canvas? = null
+    private lateinit var canvas: Canvas
 
     init {
         val game = Game.getInstance()
         mapWidth = game.getMapWidth()
         mapHeight = game.getMapHeight()
 
-
         paint.style = Paint.Style.FILL
         paint.strokeWidth = 6F
-        R.color.asphalt.also { paint.color = it }
-
-
-
     }
 
+    @SuppressLint("ResourceAsColor")
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         this.canvas = canvas
@@ -65,8 +60,11 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
                 cellHeight = MIN_CELL_SIZE
         }
 
-
-        R.color.asphalt.also { paint.color = it }
+        when(game.getActualPlayer()){
+            PLAYER.BLUE -> paint.setARGB(255, 0, 0, 255)
+            PLAYER.RED -> paint.setARGB(255, 255, 0, 0)
+            else -> paint.color = R.color.asphalt
+        }
         for (i in 0..mapWidth + 1) //fuggoleges
             canvas.drawLine(
                 (i * cellWidth) + (correct / 2),
@@ -83,7 +81,6 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
                 (i * cellHeight) + (correct / 2),
                 paint
             )
-
         //cellak kirajzolasa
         var map = game.getMap()
         for (a in map)
@@ -112,8 +109,7 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
                 val x = ceil(xTemp.toDouble()).toInt()
                 val y = ceil(yTemp.toDouble()).toInt()
                 if(x <= mapWidth && y <= mapHeight && x > 0 && y > 0) {
-                    var field = game.clickedOn(x,y)
-                    //draw(field)
+                    game.clickedOn(x,y)
                     this.invalidate()
                 }
             }
@@ -126,47 +122,65 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
 
 
     @SuppressLint("ResourceAsColor")
-    private fun draw(field: Field){
+    private fun draw(field: Field) {
         var x = field.x
         var y = field.y
-        R.color.asphalt.also { paint.color = it }
 
         var sign = ""
-        when(field.getSign()){
+        when (field.getSign()) {
             SIGN.ONE -> {
                 sign = "1"
             }
             SIGN.TWO -> sign = "2"
             SIGN.THREE -> sign = "3"
             SIGN.FOUR -> sign = "4"
+            SIGN.FIVE -> sign = "5"
+            SIGN.SIX -> sign = "6"
             SIGN.BASE -> {
-                sign = when(field.getPlayer()){
+                sign = when (field.getPlayer()) {
                     PLAYER.RED -> "X"
                     PLAYER.BLUE -> "O"
                     else -> "."
                 }
             }
-            else-> return
+            else -> return
 
-        }
-
-
-        when(field.getPlayer()){
-            PLAYER.RED -> {
-                Log.d("Bugfix", "Color.RED")
-                paint.color  = R.color.player_red
-            }
-            PLAYER.BLUE -> {
-                Log.d("Bugfix", "Color.BLUE")
-                paint.color = R.color.player_red
-            }
         }
         paint.textSize = 100F
-        if(field.getHighlighted()){
-            paint.color  = R.color.white
-            canvas?.drawRect((x-1) * cellWidth + correct,  (y-1) * cellHeight + correct, x*cellWidth,y*cellHeight, paint )
-        }
-        canvas?.drawText(sign, (x-0.85F) * cellWidth + correct,  (y- 0.3f)*cellHeight, paint)
-    }
 
+
+
+        when (field.getPlayer()) {
+            PLAYER.RED -> {
+                val p2 = Paint()
+                p2.textSize = 100F
+                if (field.isHighlighted())
+                    p2.setARGB(255, 0, 255, 0)
+                else
+                    p2.setARGB(255, 255, 0, 0)
+                canvas.drawText(
+                    sign,
+                    (x - 0.85F) * cellWidth + correct,
+                    (y - 0.3f) * cellHeight,
+                    p2
+                )
+            }
+            PLAYER.BLUE -> {
+                //canvas?.drawRect((x-1) * cellWidth + correct,  (y-1) * cellHeight + correct, x*cellWidth,y*cellHeight, paint )
+                //paint.alpha = 255
+                val p2 = Paint()
+                p2.textSize = 100F
+                if (field.isHighlighted())
+                    p2.setARGB(255, 0, 255, 0)
+                else
+                    p2.setARGB(255, 0, 0, 255)
+                canvas.drawText(
+                    sign,
+                    (x - 0.85F) * cellWidth + correct,
+                    (y - 0.3f) * cellHeight,
+                    p2
+                )
+            }
+        }
+    }
 }

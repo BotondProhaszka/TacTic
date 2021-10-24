@@ -32,11 +32,7 @@ class MenuActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.vpMenu.adapter = MenuPageAdapter(supportFragmentManager)
-        binding.btnSettings.setOnClickListener{
-            val intent = Intent(this, GameActivity::class.java)
-            startActivity(intent)
 
-        }
 
 
     }

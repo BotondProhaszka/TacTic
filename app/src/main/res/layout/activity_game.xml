@@ -18,8 +18,17 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/tvCurrentTurn" />
 
+        <TextView
+            android:id="@+id/tvCurrentTurn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Let's Begin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/view"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
