@@ -1,7 +1,5 @@
 package hu.bme.aut.tactic.model
 
-import android.util.Log
-
 
 class Field(var x: Int, var y: Int) {
     private var player: PLAYER? = null

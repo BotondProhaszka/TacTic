@@ -28,7 +28,6 @@ class GameActivity : AppCompatActivity() {
         val sp = PreferenceManager.getDefaultSharedPreferences(this)
         val x = sp.getInt("MAP_WIDTH_VAL", 1)
         val y = sp.getInt("MAP_HEIGHT_VAL", 1)
-        Log.d("Bugfix", "$x:$y")
 
         game.startNewGame(x, y)
         game.setRandomFirstPlayer()

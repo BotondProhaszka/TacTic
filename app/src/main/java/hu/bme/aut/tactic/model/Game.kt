@@ -1,12 +1,6 @@
 package hu.bme.aut.tactic.model
 
-import android.app.GameManager
-import android.media.Image
-import android.util.Log
 import hu.bme.aut.tactic.R
-import hu.bme.aut.tactic.activities.GameActivity
-import hu.bme.aut.tactic.databinding.ActivityGameBinding
-import hu.bme.aut.tactic.databinding.ActivityMenuBinding
 
 enum class ROUND {INIT,FIRST_BASE, SEC_BASE, GAME, DRAW, BLUE_WIN, RED_WIN}
 
@@ -133,7 +127,6 @@ object Game {
         }
 
         fun clickedOn(x: Int, y: Int) {
-            Log.d("Bugfix", "${x}:${y}")
 
             if(round != ROUND.FIRST_BASE && round != ROUND.SEC_BASE)
                 if(!hasCorrectNeighbour(x,y)) {
