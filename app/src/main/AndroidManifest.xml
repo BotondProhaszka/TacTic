@@ -13,6 +13,7 @@
         <activity
             android:name=".activities.GameActivity"
             android:exported="true"
+            android:theme="@style/Theme.TacTic"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.MenuActivity"
@@ -26,5 +27,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

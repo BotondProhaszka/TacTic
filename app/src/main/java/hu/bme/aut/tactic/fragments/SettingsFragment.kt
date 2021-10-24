@@ -34,51 +34,9 @@ class SettingsFragment: DialogFragment(), AdapterView.OnItemSelectedListener{
     ): View {
         binding = SettingsFragmentBinding.inflate(inflater, container, false)
 
-        when (this.context?.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)) {
-            Configuration.UI_MODE_NIGHT_UNDEFINED -> {
-                binding.ivNightMode.setImageResource(R.drawable.ic_nightmode)
-            }
-            Configuration.UI_MODE_NIGHT_YES -> {
-                binding.ivNightMode.setImageResource(R.drawable.ic_daymode)
-            }
-            Configuration.UI_MODE_NIGHT_NO -> {
-                binding.ivNightMode.setImageResource(R.drawable.ic_nightmode)
-            }
-        }
-
-        binding.ivNightMode.setOnClickListener {
-            when (this.context?.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)) {
-                Configuration.UI_MODE_NIGHT_UNDEFINED -> {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                    binding.ivNightMode.setImageResource(R.drawable.ic_nightmode)
-                }
-                Configuration.UI_MODE_NIGHT_YES -> {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                    binding.ivNightMode.setImageResource(R.drawable.ic_daymode)
-                }
-                Configuration.UI_MODE_NIGHT_NO -> {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                    binding.ivNightMode.setImageResource(R.drawable.ic_nightmode)
-                }
-            }
-
-        }
-
-        for(i in 4..9){
-            intArray.add(i)
-        }
-        val aa = ArrayAdapter(this.requireContext(), android.R.layout.simple_spinner_dropdown_item, intArray)
-        binding.spinnerX.adapter = aa
-        binding.spinnerY.adapter = aa
-        binding.spinnerX.onItemSelectedListener = this
-        binding.spinnerY.onItemSelectedListener = this
-
-        val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
-        val xPos = sp.getInt("MAP_WIDTH_POS", 0)
-        val yPos = sp.getInt("MAP_HEIGHT_POS", 0)
-
-        binding.spinnerX.setSelection(xPos)
-        binding.spinnerY.setSelection(yPos)
+        initTheme()
+        setThemeListener()
+        initSpinners()
 
         binding.btnApply.setOnClickListener{
             val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
@@ -88,6 +46,7 @@ class SettingsFragment: DialogFragment(), AdapterView.OnItemSelectedListener{
             editor.putInt("MAP_WIDTH_VAL", binding.spinnerX.selectedItem as Int)
             editor.putInt("MAP_HEIGHT_VAL", binding.spinnerY.selectedItem as Int)
             editor.apply()
+            dialog?.dismiss()
         }
 
 
@@ -105,5 +64,60 @@ class SettingsFragment: DialogFragment(), AdapterView.OnItemSelectedListener{
 
     override fun onNothingSelected(p0: AdapterView<*>?) {
         TODO("Not yet implemented")
+    }
+
+    private fun initSpinners(){
+        for(i in 4..9){
+            intArray.add(i)
+        }
+        val aa = ArrayAdapter(this.requireContext(), android.R.layout.simple_spinner_dropdown_item, intArray)
+        binding.spinnerX.adapter = aa
+        binding.spinnerY.adapter = aa
+        binding.spinnerX.onItemSelectedListener = this
+        binding.spinnerY.onItemSelectedListener = this
+
+        val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
+        val xPos = sp.getInt("MAP_WIDTH_POS", 0)
+        val yPos = sp.getInt("MAP_HEIGHT_POS", 0)
+
+        binding.spinnerX.setSelection(xPos)
+        binding.spinnerY.setSelection(yPos)
+    }
+
+    private fun setThemeListener(){
+        val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
+        val editor: SharedPreferences.Editor = sp.edit()
+
+
+        binding.ivNightMode.setOnClickListener {
+            when (sp.getBoolean("NIGHT_MODE", false)) {
+                true -> {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    binding.ivNightMode.setImageResource(R.drawable.ic_twotone_brightness_low_24)
+                    editor.putBoolean("NIGHT_MODE", false)
+                    editor.apply()
+                }
+                false -> {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    binding.ivNightMode.setImageResource(R.drawable.ic_twotone_brightness_3_24)
+                    editor.putBoolean("NIGHT_MODE", true)
+                    editor.apply()
+                }
+            }
+
+        }
+    }
+
+    private fun initTheme(){
+        val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
+        when (sp.getBoolean("NIGHT_MODE", true)) {
+            true -> {
+                binding.ivNightMode.setImageResource(R.drawable.ic_twotone_brightness_low_24)
+
+            }
+            false -> {
+                binding.ivNightMode.setImageResource(R.drawable.ic_twotone_brightness_3_24)
+            }
+        }
     }
 }

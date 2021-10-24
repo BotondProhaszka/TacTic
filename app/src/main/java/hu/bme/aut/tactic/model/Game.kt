@@ -1,5 +1,6 @@
 package hu.bme.aut.tactic.model
 
+import android.util.Log
 import hu.bme.aut.tactic.R
 
 enum class ROUND {INIT,FIRST_BASE, SEC_BASE, GAME, DRAW, BLUE_WIN, RED_WIN}
@@ -70,16 +71,17 @@ object Game {
 
         fun startNewGame(width: Int, height: Int){
             round = ROUND.FIRST_BASE
-            setMapSize(width, height)
+            setMap(width, height)
+            setRandomFirstPlayer()
         }
 
-        fun setMapSize(width: Int, height: Int) {
+        private fun setMap(width: Int, height: Int) {
             mapWidth = width
             mapHeight = height
             map = ArrayList()
-            for(i in 0..height){
-                val row = ArrayList<Field>(width)
-                for (j in 0..width){
+            for(i in 0..width){
+                val row = ArrayList<Field>(height)
+                for (j in 0..height){
                     row.add(Field(i, j))
                 }
                 map.add(row)
@@ -89,7 +91,8 @@ object Game {
         fun setFirstPlayer(player: PLAYER){
             actual_player = player
         }
-        fun setRandomFirstPlayer(){
+
+        private fun setRandomFirstPlayer(){
             val rand = (0..1).random()
             actual_player = when(rand) {
                 0 -> PLAYER.BLUE
@@ -101,16 +104,10 @@ object Game {
         @JvmName("getMap1")
         fun getMap() : ArrayList<ArrayList<Field>> {return map}
         fun getActualPlayer(): PLAYER { return actual_player }
-        fun getMapWidth(): Int {
-            return mapWidth
-        }
-
-        fun getMapHeight(): Int {
-            return mapHeight
-        }
+        fun getMapWidth(): Int { return mapWidth }
+        fun getMapHeight(): Int { return mapHeight }
 
         private fun changePlayer(){
-            var tv = R.id.tvCurrentTurn
             actual_player = getOtherPlayer(actual_player)
             removeClickedFrom()
         }
@@ -127,7 +124,6 @@ object Game {
         }
 
         fun clickedOn(x: Int, y: Int) {
-
             if(round != ROUND.FIRST_BASE && round != ROUND.SEC_BASE)
                 if(!hasCorrectNeighbour(x,y)) {
                     if(clickedFrom != null)

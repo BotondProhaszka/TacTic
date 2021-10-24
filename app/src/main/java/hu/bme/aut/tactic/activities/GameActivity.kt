@@ -30,7 +30,6 @@ class GameActivity : AppCompatActivity() {
         val y = sp.getInt("MAP_HEIGHT_VAL", 1)
 
         game.startNewGame(x, y)
-        game.setRandomFirstPlayer()
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val mapView: View = inflater.inflate(R.layout.map_view, null)
         val parent = binding.view

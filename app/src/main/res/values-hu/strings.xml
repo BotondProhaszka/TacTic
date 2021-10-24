@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TacTic</string>
+    <string name="start">Start</string>
+    <string name="tactic">TacTic</string>
+    <string name="settings">Beállítások</string>
+    <string name="theme">Téma</string>
+    <string name="width">Szélesség</string>
+    <string name="height">Magasság</string>
+    <string name="apply">Alkalmaz</string>
+</resources>
