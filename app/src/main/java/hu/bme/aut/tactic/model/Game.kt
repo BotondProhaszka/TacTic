@@ -59,7 +59,6 @@ object Game {
         private var clickedFrom: Field? = null
 
         fun getInstance(): Game {
-
             if (instance == null) {
                 synchronized(this) {
                     instance = Game

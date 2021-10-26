@@ -12,7 +12,7 @@ class Field(var x: Int, var y: Int) {
         this.highlighted = highlighted
     }
 
-    constructor(field: Field?):this(field!!.x, field.y, field.getPlayer(), field.getSign(), field.isHighlighted()  ){ }
+    constructor(field: Field?):this(field!!.x, field.y, field.getPlayer(), field.getSign(), field.isHighlighted())
 
     fun getPlayer() : PLAYER? { return player }
     fun getSign() : SIGN? { return sign }
@@ -41,8 +41,7 @@ class Field(var x: Int, var y: Int) {
             return false
         if(sign!!.value >= 6)
             return false
-        val i = sign!!.value + 1
-        sign = sign?.getNext();
+        sign = sign?.getNext()
         return true
     }
 
@@ -51,28 +50,28 @@ class Field(var x: Int, var y: Int) {
     fun attackFrom(from: Field): Boolean{
         if(this.player != from.player){
 
-            if(this.sign == SIGN.BASE) {
-                if (from.sign!!.value >= 2) {
-                    Game.getInstance().playerWins(from.getPlayer()!!)
+            when {
+                this.sign == SIGN.BASE -> {
+                    return if (from.sign!!.value >= 2) {
+                        Game.getInstance().playerWins(from.getPlayer()!!)
+                        this.setPlayer(from.getPlayer()!!)
+                        //return Field(x, y, from.getPlayer(), SIGN.BASE, false)
+                        true
+                    } else
+                        false
+                }
+                from.sign!!.minus(this.sign!!) >= 1 -> {
+                    //return Field(x, y, from.getPlayer(), from.sign!!.getMinus(this.sign!!), false)
                     this.setPlayer(from.getPlayer()!!)
-                    //return Field(x, y, from.getPlayer(), SIGN.BASE, false)
+                    this.setSign(from.sign!!.getMinus(this.sign!!))
                     return true
                 }
-                else
-                    return false
-            }
+                from.sign!!.minus(this.sign!!)== 0 -> {
 
-            else if(from.sign!!.minus(this.sign!!) >= 1){
-                //return Field(x, y, from.getPlayer(), from.sign!!.getMinus(this.sign!!), false)
-                this.setPlayer(from.getPlayer()!!)
-                this.setSign(from.sign!!.getMinus(this.sign!!))
-                return true
+                    this.setSign(SIGN.ONE)
+                    Game.getInstance().getMap()[from.x][from.y].setSign(SIGN.ONE)
+                    return true
                 }
-            else if(from.sign!!.minus(this.sign!!)== 0){
-
-                this.setSign(SIGN.ONE)
-                Game.getInstance().getMap()[from.x][from.y].setSign(SIGN.ONE)
-                return true
             }
         }
         return false
