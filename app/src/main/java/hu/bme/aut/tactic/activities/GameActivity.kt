@@ -7,8 +7,10 @@ import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import hu.bme.aut.tactic.R
+import hu.bme.aut.tactic.data.Score
 import hu.bme.aut.tactic.data.ScoresDatabase
 import hu.bme.aut.tactic.databinding.ActivityGameBinding
+import hu.bme.aut.tactic.dialogs.RestartGameDialog
 import hu.bme.aut.tactic.model.Game
 
 
@@ -27,12 +29,19 @@ class GameActivity : AppCompatActivity() {
         val x = sp.getInt("MAP_WIDTH_VAL", 5)
         val y = sp.getInt("MAP_HEIGHT_VAL", 5)
 
-        val db = ScoresDatabase.getDatabase(this)
-        game.setDB(db)
         game.startNewGame(x, y)
+        game.setGameActivity(this)
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val mapView: View = inflater.inflate(R.layout.map_view, null)
         val parent = binding.view
         parent.addView(mapView, parent.childCount -1)
     }
+
+    fun gameOver(score: Score){
+        val restartGameDialog = RestartGameDialog(score)
+        restartGameDialog.isCancelable = true
+        restartGameDialog.show(supportFragmentManager, "gameOver")
+    }
+
+
 }

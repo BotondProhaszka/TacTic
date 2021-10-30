@@ -13,4 +13,8 @@
     <string name="bluesTurn">Blue\'s turn!</string>
     <string name="redsTurn">Red\'s turn!</string>
     <string name="delete">Delete</string>
+    <string name="scores">Scores</string>
+    <string name="game_over">Game Over!</string>
+    <string name="restart">Restart</string>
+    <string name="menu">Menu</string>
 </resources>

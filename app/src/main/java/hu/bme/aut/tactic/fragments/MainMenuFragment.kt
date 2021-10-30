@@ -8,7 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
  import hu.bme.aut.tactic.activities.GameActivity
-import hu.bme.aut.tactic.databinding.MainMenuFragmentBinding
+ import hu.bme.aut.tactic.activities.ScoreActivity
+ import hu.bme.aut.tactic.databinding.MainMenuFragmentBinding
 
 class MainMenuFragment : Fragment() {
     private lateinit var binding: MainMenuFragmentBinding
@@ -18,6 +19,11 @@ class MainMenuFragment : Fragment() {
 
         binding.btnStart.setOnClickListener{
             val intent = Intent(this.context, GameActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.btnScores.setOnClickListener{
+            val intent = Intent(this.context, ScoreActivity::class.java)
             startActivity(intent)
         }
 

@@ -1,8 +1,13 @@
 package hu.bme.aut.tactic.model
 
 
+import android.content.Intent
 import android.util.Log
+import androidx.fragment.app.FragmentManager
+import hu.bme.aut.tactic.activities.GameActivity
+import hu.bme.aut.tactic.activities.ScoreActivity
 import hu.bme.aut.tactic.data.*
+import hu.bme.aut.tactic.dialogs.RestartGameDialog
 
 enum class ROUND {INIT,FIRST_BASE, SEC_BASE, GAME, DRAW, BLUE_WIN, RED_WIN}
 
@@ -57,11 +62,11 @@ object Game {
         private var round: ROUND = ROUND.FIRST_BASE
         private var actual_player : PLAYER = PLAYER.BLUE
 
-        private lateinit var db : ScoresDatabase
-
         private var clickedFrom: Field? = null
 
+        private var scores = mutableListOf<Score>()
 
+        private lateinit var gameActivity: GameActivity
 
         fun getInstance(): Game {
             if (instance == null) {
@@ -73,13 +78,15 @@ object Game {
             return instance
         }
 
-        fun setDB(database: ScoresDatabase){
-            db = database
-        }
-
         fun startNewGame(width: Int, height: Int){
             round = ROUND.FIRST_BASE
             setMap(width, height)
+            setRandomFirstPlayer()
+        }
+
+        fun restartGame(){
+            round = ROUND.FIRST_BASE
+            setMap(mapWidth, mapHeight)
             setRandomFirstPlayer()
         }
 
@@ -97,10 +104,6 @@ object Game {
             }
         }
 
-        fun setFirstPlayer(player: PLAYER){
-            actual_player = player
-        }
-
         private fun setRandomFirstPlayer(){
             val rand = (0..1).random()
             actual_player = when(rand) {
@@ -109,6 +112,7 @@ object Game {
                 else -> PLAYER.RED
             }
         }
+        fun setGameActivity(gameActivity: GameActivity){ this.gameActivity = gameActivity}
 
         @JvmName("getMap1")
         fun getMap() : ArrayList<ArrayList<Field>> {return map}
@@ -130,10 +134,15 @@ object Game {
 
         fun playerWins(winner: PLAYER) {
             val score = Score(null, "Player1Name", 1, "Player2Name", 2, true)
-            db.scoreDao().insert(score)
-            Log.d("Bugfix", "ASD")
+            scores.add(score)
+            gameActivity.gameOver(score)
         }
 
+        fun getScores(): List<Score>{
+            var result = scores.toMutableList()
+            scores.clear()
+            return result
+        }
 
         fun clickedOn(x: Int, y: Int) {
             if(round != ROUND.FIRST_BASE && round != ROUND.SEC_BASE)

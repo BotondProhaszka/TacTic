@@ -13,6 +13,8 @@
         <item name="android:bottomRightRadius">9dp</item>
         <item name="android:topLeftRadius">9dp</item>
         <item name="android:topRightRadius">9dp</item>
+        <item name="android:layout_margin">15dp</item>
+
     </style>
 
 
