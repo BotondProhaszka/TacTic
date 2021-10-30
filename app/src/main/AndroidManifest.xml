@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TacTic">
         <activity
-            android:name=".Firebase.StartOnlineGameActivity"
+            android:name=".activities.ScoreActivity"
             android:exported="false" />
         <activity
             android:name=".activities.GameActivity"

@@ -12,4 +12,5 @@
     <string name="add">Add</string>
     <string name="bluesTurn">Blue\'s turn!</string>
     <string name="redsTurn">Red\'s turn!</string>
+    <string name="delete">Delete</string>
 </resources>

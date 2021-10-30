@@ -1,7 +1,8 @@
 package hu.bme.aut.tactic.model
 
+
 import android.util.Log
-import hu.bme.aut.tactic.R
+import hu.bme.aut.tactic.data.*
 
 enum class ROUND {INIT,FIRST_BASE, SEC_BASE, GAME, DRAW, BLUE_WIN, RED_WIN}
 
@@ -56,7 +57,11 @@ object Game {
         private var round: ROUND = ROUND.FIRST_BASE
         private var actual_player : PLAYER = PLAYER.BLUE
 
+        private lateinit var db : ScoresDatabase
+
         private var clickedFrom: Field? = null
+
+
 
         fun getInstance(): Game {
             if (instance == null) {
@@ -68,6 +73,10 @@ object Game {
             return instance
         }
 
+        fun setDB(database: ScoresDatabase){
+            db = database
+        }
+
         fun startNewGame(width: Int, height: Int){
             round = ROUND.FIRST_BASE
             setMap(width, height)
@@ -75,6 +84,7 @@ object Game {
         }
 
         private fun setMap(width: Int, height: Int) {
+
             mapWidth = width
             mapHeight = height
             map = ArrayList()
@@ -118,9 +128,12 @@ object Game {
             }
         }
 
-        fun playerWins(winner: PLAYER){
-
+        fun playerWins(winner: PLAYER) {
+            val score = Score(null, "Player1Name", 1, "Player2Name", 2, true)
+            db.scoreDao().insert(score)
+            Log.d("Bugfix", "ASD")
         }
+
 
         fun clickedOn(x: Int, y: Int) {
             if(round != ROUND.FIRST_BASE && round != ROUND.SEC_BASE)
