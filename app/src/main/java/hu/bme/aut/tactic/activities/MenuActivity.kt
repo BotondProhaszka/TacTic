@@ -1,5 +1,6 @@
 package hu.bme.aut.tactic.activities
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,7 @@ import android.preference.PreferenceManager
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.room.Room
+import hu.bme.aut.tactic.R
 import hu.bme.aut.tactic.adapters.MenuPageAdapter
 import hu.bme.aut.tactic.adapters.ScoresAdapter
 import hu.bme.aut.tactic.data.Score
@@ -57,5 +59,13 @@ class MenuActivity : AppCompatActivity() {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             }
         }
+    }
+
+    override fun onBackPressed() {
+        AlertDialog.Builder(this)
+            .setMessage(R.string.r_u_sure_u_want_to_quit)
+            .setPositiveButton(R.string.ok) { _, _ -> finish()}
+            .setNegativeButton(R.string.cancel, null)
+            .show()
     }
 }

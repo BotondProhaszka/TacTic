@@ -114,7 +114,6 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
                 }
             }
         }
-
         return true
     }
 

@@ -62,9 +62,8 @@ object Game {
         private var round: ROUND = ROUND.FIRST_BASE
         private var actual_player : PLAYER = PLAYER.BLUE
 
+        private var score = Score(null, "Player1Name", 1, "Player2Name", 2, true)
         private var clickedFrom: Field? = null
-
-        private var scores = mutableListOf<Score>()
 
         private lateinit var gameActivity: GameActivity
 
@@ -88,6 +87,7 @@ object Game {
             round = ROUND.FIRST_BASE
             setMap(mapWidth, mapHeight)
             setRandomFirstPlayer()
+
         }
 
         private fun setMap(width: Int, height: Int) {
@@ -119,6 +119,7 @@ object Game {
         fun getActualPlayer(): PLAYER { return actual_player }
         fun getMapWidth(): Int { return mapWidth }
         fun getMapHeight(): Int { return mapHeight }
+        fun getScore(): Score { return score }
 
         private fun changePlayer(){
             actual_player = getOtherPlayer(actual_player)
@@ -133,15 +134,7 @@ object Game {
         }
 
         fun playerWins(winner: PLAYER) {
-            val score = Score(null, "Player1Name", 1, "Player2Name", 2, true)
-            scores.add(score)
             gameActivity.gameOver(score)
-        }
-
-        fun getScores(): List<Score>{
-            var result = scores.toMutableList()
-            scores.clear()
-            return result
         }
 
         fun clickedOn(x: Int, y: Int) {

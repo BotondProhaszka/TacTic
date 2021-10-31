@@ -37,14 +37,6 @@ class ScoreActivity : AppCompatActivity(), ScoresAdapter.ScoreClickListener {
     private fun loadScoresInBackground(){
         thread{
             val scores = database.scoreDao().getAll().toMutableList()
-            val scoresFromGame = Game.getInstance().getScores()
-
-            if(scoresFromGame.isNotEmpty()) {
-                for(s in scoresFromGame)
-                    database.scoreDao().insert(s)
-                scores.addAll(scoresFromGame)
-
-            }
             runOnUiThread{
                 adapter.update(scores)
             }

@@ -17,4 +17,10 @@
     <string name="game_over">Game Over!</string>
     <string name="restart">Restart</string>
     <string name="menu">Menu</string>
+    <string name="draw">Draw</string>
+    <string name="offline_game">Offline Game</string>
+    <string name="name">Name</string>
+    <string name="r_u_sure_u_want_to_quit">Are you sure you want to quit?</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
 </resources>
