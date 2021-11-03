@@ -3,7 +3,9 @@ package hu.bme.aut.tactic.dialogs
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +18,7 @@ import hu.bme.aut.tactic.activities.MenuActivity
 import hu.bme.aut.tactic.data.Score
 import hu.bme.aut.tactic.databinding.RestartGameDialogBinding
 import hu.bme.aut.tactic.model.Game
+import kotlin.concurrent.thread
 
 class RestartGameDialog(context: Context, score: Score): Dialog(context) {
 
@@ -27,6 +30,7 @@ class RestartGameDialog(context: Context, score: Score): Dialog(context) {
         binding = RestartGameDialogBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initTextViews()
+
         binding.btnRestart.setOnClickListener{
             Log.d("Bugfix", "btnRestart clicked")
             Game.getInstance().restartGame()
@@ -38,6 +42,12 @@ class RestartGameDialog(context: Context, score: Score): Dialog(context) {
             val intent = Intent(this.context, MenuActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(context, intent, null)
+            thread{
+                val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
+                val editor: SharedPreferences.Editor = sp.edit()
+                editor.putBoolean("SHOULD_SHOW_NEW_GAME_DIALOG", true)
+                editor.apply()
+            }
         }
     }
 

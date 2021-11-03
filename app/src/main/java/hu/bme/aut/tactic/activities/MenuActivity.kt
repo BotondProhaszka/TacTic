@@ -17,6 +17,7 @@ import hu.bme.aut.tactic.data.ScoreDao
 import hu.bme.aut.tactic.data.ScoresDatabase
 import hu.bme.aut.tactic.databinding.ActivityMenuBinding
 import hu.bme.aut.tactic.model.Game
+import kotlin.concurrent.thread
 
 class MenuActivity : AppCompatActivity() {
 
@@ -41,6 +42,12 @@ class MenuActivity : AppCompatActivity() {
         binding = ActivityMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.vpMenu.adapter = MenuPageAdapter(supportFragmentManager)
+        thread {
+            val sp = PreferenceManager.getDefaultSharedPreferences(this)
+            val editor: SharedPreferences.Editor = sp.edit()
+            editor.putBoolean("SHOULD_SHOW_NEW_GAME_DIALOG", true)
+            editor.apply()
+        }
     }
 
     private fun changeTheme(id : Int){

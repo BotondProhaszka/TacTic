@@ -1,19 +1,20 @@
 package hu.bme.aut.tactic.activities
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import hu.bme.aut.tactic.R
 import hu.bme.aut.tactic.data.Score
 import hu.bme.aut.tactic.data.ScoresDatabase
 import hu.bme.aut.tactic.databinding.ActivityGameBinding
+import hu.bme.aut.tactic.dialogs.NewOfflineGameDialog
 import hu.bme.aut.tactic.dialogs.RestartGameDialog
 import hu.bme.aut.tactic.model.Game
 import kotlin.concurrent.thread
@@ -21,7 +22,6 @@ import kotlin.concurrent.thread
 
 class GameActivity : AppCompatActivity() {
     private lateinit var binding : ActivityGameBinding
-
     private var game : Game = Game.getInstance()
     private lateinit var database: ScoresDatabase
 
@@ -36,6 +36,9 @@ class GameActivity : AppCompatActivity() {
         val sp = PreferenceManager.getDefaultSharedPreferences(this)
         val x = sp.getInt("MAP_WIDTH_VAL", 5)
         val y = sp.getInt("MAP_HEIGHT_VAL", 5)
+        val editor: SharedPreferences.Editor = sp.edit()
+        var shouldShow = sp.getBoolean("SHOULD_SHOW_NEW_GAME_DIALOG", true)
+        Log.d("Bugfix", "shouldShow: $shouldShow")
 
         game.startNewGame(x, y)
         game.setGameActivity(this)
@@ -43,7 +46,12 @@ class GameActivity : AppCompatActivity() {
         val mapView: View = inflater.inflate(R.layout.map_view, null)
         val parent = binding.view
         parent.addView(mapView, parent.childCount -1)
-
+        if(shouldShow) {
+            editor.putBoolean("SHOULD_SHOW_NEW_GAME_DIALOG", false)
+            editor.apply()
+            Log.d("Bugfix", "if: ${sp.getBoolean("SHOULD_SHOW_NEW_GAME_DIALOG", true)}")
+            NewOfflineGameDialog(this).show()
+        }
         binding.btnDraw.setOnClickListener {
             gameOver(game.getScore())
         }
@@ -53,7 +61,11 @@ class GameActivity : AppCompatActivity() {
     override fun onBackPressed() {
         AlertDialog.Builder(this)
             .setMessage(R.string.r_u_sure_u_want_to_quit)
-            .setPositiveButton(R.string.ok) {_, _ -> finish()}
+            .setPositiveButton(R.string.ok) { _, _ ->
+                var menuIntent = Intent(this, MenuActivity::class.java)
+                menuIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                startActivity( menuIntent, null)
+            }
             .setNegativeButton(R.string.cancel, null)
             .show()
     }
@@ -62,9 +74,7 @@ class GameActivity : AppCompatActivity() {
         thread {
             database.scoreDao().insert(score)
         }
+
         RestartGameDialog(this, score).show()
-
     }
-
-
 }

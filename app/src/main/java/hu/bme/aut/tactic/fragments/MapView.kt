@@ -41,6 +41,25 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
         paint.strokeWidth = 6F
     }
 
+    fun clearMap(){
+        for (i in 0..mapWidth + 1) //fuggoleges
+            canvas.drawLine(
+                (i * cellWidth) + (correct / 2),
+                (correct / 2),
+                (i * cellWidth) + (correct / 2),
+                height.toFloat() - (correct / 2),
+                paint
+            )
+        for (i in 0..mapHeight + 1) //vizszintes
+            canvas.drawLine(
+                (correct / 2),
+                (i * cellHeight) + (correct / 2),
+                width.toFloat() - (correct / 2),
+                (i * cellHeight) + (correct / 2),
+                paint
+            )
+    }
+
     @SuppressLint("ResourceAsColor")
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)

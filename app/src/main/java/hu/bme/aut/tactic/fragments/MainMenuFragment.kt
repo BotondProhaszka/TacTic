@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
  import hu.bme.aut.tactic.activities.GameActivity
  import hu.bme.aut.tactic.activities.ScoreActivity
  import hu.bme.aut.tactic.databinding.MainMenuFragmentBinding
+ import hu.bme.aut.tactic.dialogs.NewOfflineGameDialog
+ import hu.bme.aut.tactic.model.Game
 
 class MainMenuFragment : Fragment() {
     private lateinit var binding: MainMenuFragmentBinding
@@ -17,7 +19,12 @@ class MainMenuFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = MainMenuFragmentBinding.inflate(inflater, container, false)
 
-        binding.btnStart.setOnClickListener{
+        binding.btnOffline.setOnClickListener {
+            val intent = Intent(this.context, GameActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.btnOnline.setOnClickListener{
             val intent = Intent(this.context, GameActivity::class.java)
             startActivity(intent)
         }

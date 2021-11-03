@@ -1,11 +1,26 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">TacTic</string>
     <string name="start">Start</string>
-    <string name="tactic">TacTic</string>
     <string name="settings">Beállítások</string>
     <string name="theme">Téma</string>
+    <string name="defaultTheme">Alap téma</string>
+    <string name="sun_n_sky">Sun N\' Sky</string>
     <string name="width">Szélesség</string>
     <string name="height">Magasság</string>
     <string name="apply">Alkalmaz</string>
+    <string name="add">Hozzáad</string>
+    <string name="bluesTurn">Kék jön!</string>
+    <string name="redsTurn">Piros jön!</string>
+    <string name="delete">Töröl</string>
+    <string name="scores">Pontok</string>
+    <string name="game_over">Játék vége!</string>
+    <string name="restart">Újrakezd</string>
+    <string name="menu">Menü</string>
+    <string name="draw">Döntetlen</string>
+    <string name="offline">Offline</string>
+    <string name="online">Online</string>
+    <string name="name">Név</string>
+    <string name="r_u_sure_u_want_to_quit">Biztosan ki szeretnél lépni?</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Mégse</string>
 </resources>

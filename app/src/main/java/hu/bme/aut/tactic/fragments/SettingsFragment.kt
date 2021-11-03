@@ -1,7 +1,9 @@
 package hu.bme.aut.tactic.fragments
 
+import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
@@ -18,6 +20,7 @@ import hu.bme.aut.tactic.databinding.SettingsFragmentBinding
 
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.annotation.RequiresApi
 
 
 class SettingsFragment: DialogFragment(), AdapterView.OnItemSelectedListener{
@@ -89,22 +92,21 @@ class SettingsFragment: DialogFragment(), AdapterView.OnItemSelectedListener{
         val editor: SharedPreferences.Editor = sp.edit()
 
 
-        binding.ivNightMode.setOnClickListener {
+        binding.ibNightmode.setOnClickListener {
             when (sp.getBoolean("NIGHT_MODE", false)) {
                 true -> {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                    binding.ivNightMode.setImageResource(R.drawable.ic_twotone_brightness_low_24)
+                    binding.ibNightmode.setImageResource(R.drawable.ic_outline_brightness_low_24)
                     editor.putBoolean("NIGHT_MODE", false)
                     editor.apply()
                 }
                 false -> {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                    binding.ivNightMode.setImageResource(R.drawable.ic_twotone_brightness_3_24)
+                    binding.ibNightmode.setImageResource(R.drawable.ic_twotone_brightness_3_24)
                     editor.putBoolean("NIGHT_MODE", true)
                     editor.apply()
                 }
             }
-
         }
     }
 
@@ -112,11 +114,10 @@ class SettingsFragment: DialogFragment(), AdapterView.OnItemSelectedListener{
         val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
         when (sp.getBoolean("NIGHT_MODE", true)) {
             true -> {
-                binding.ivNightMode.setImageResource(R.drawable.ic_twotone_brightness_low_24)
-
+                binding.ibNightmode.setImageResource(R.drawable.ic_outline_brightness_low_24)
             }
             false -> {
-                binding.ivNightMode.setImageResource(R.drawable.ic_twotone_brightness_3_24)
+                binding.ibNightmode.setImageResource(R.drawable.ic_twotone_brightness_3_24)
             }
         }
     }

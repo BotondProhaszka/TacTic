@@ -14,16 +14,6 @@
         android:minHeight="300dp">
 
 
-        <ImageView
-            android:id="@+id/ivNightMode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:scaleX="1.7"
-            android:scaleY="1.7"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <Spinner
             android:id="@+id/spinnerX"
             android:layout_width="wrap_content"
@@ -102,6 +92,22 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.75" />
+
+        <ImageButton
+            android:id="@+id/ibLanguage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_outline_language_24" />
+
+        <ImageButton
+            android:id="@+id/ibNightmode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_outline_brightness_low_24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

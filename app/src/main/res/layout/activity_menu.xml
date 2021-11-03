@@ -7,7 +7,6 @@
     tools:context=".activities.MenuActivity"
     android:theme="@style/Theme.TacTic">
 
-
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/vpMenu"
         style="@style/Theme.TacTic"
@@ -15,10 +14,6 @@
         android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-
-    </androidx.viewpager.widget.ViewPager>
-
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

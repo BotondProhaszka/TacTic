@@ -1,13 +1,8 @@
 package hu.bme.aut.tactic.model
 
 
-import android.content.Intent
-import android.util.Log
-import androidx.fragment.app.FragmentManager
 import hu.bme.aut.tactic.activities.GameActivity
-import hu.bme.aut.tactic.activities.ScoreActivity
 import hu.bme.aut.tactic.data.*
-import hu.bme.aut.tactic.dialogs.RestartGameDialog
 
 enum class ROUND {INIT,FIRST_BASE, SEC_BASE, GAME, DRAW, BLUE_WIN, RED_WIN}
 
@@ -134,6 +129,7 @@ object Game {
         }
 
         fun playerWins(winner: PLAYER) {
+            restartGame()
             gameActivity.gameOver(score)
         }
 
