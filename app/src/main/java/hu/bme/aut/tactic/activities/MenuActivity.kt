@@ -2,22 +2,18 @@ package hu.bme.aut.tactic.activities
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.room.Room
 import hu.bme.aut.tactic.R
-import hu.bme.aut.tactic.adapters.MenuPageAdapter
+import hu.bme.aut.tactic.adapters.MenuPagerAdapter
 import hu.bme.aut.tactic.adapters.ScoresAdapter
-import hu.bme.aut.tactic.data.Score
-import hu.bme.aut.tactic.data.ScoreDao
-import hu.bme.aut.tactic.data.ScoresDatabase
 import hu.bme.aut.tactic.databinding.ActivityMenuBinding
-import hu.bme.aut.tactic.model.Game
 import kotlin.concurrent.thread
+import kotlin.system.exitProcess
 
 class MenuActivity : AppCompatActivity() {
 
@@ -41,7 +37,7 @@ class MenuActivity : AppCompatActivity() {
 
         binding = ActivityMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.vpMenu.adapter = MenuPageAdapter(supportFragmentManager)
+        binding.vpMenu.adapter = MenuPagerAdapter(this)
         thread {
             val sp = PreferenceManager.getDefaultSharedPreferences(this)
             val editor: SharedPreferences.Editor = sp.edit()
@@ -71,7 +67,11 @@ class MenuActivity : AppCompatActivity() {
     override fun onBackPressed() {
         AlertDialog.Builder(this)
             .setMessage(R.string.r_u_sure_u_want_to_quit)
-            .setPositiveButton(R.string.ok) { _, _ -> finish()}
+            .setPositiveButton(R.string.ok) { _, _ ->
+                run {
+
+                }
+            }
             .setNegativeButton(R.string.cancel, null)
             .show()
     }

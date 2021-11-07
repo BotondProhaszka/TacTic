@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat.startActivity
 import hu.bme.aut.tactic.activities.GameActivity
 import hu.bme.aut.tactic.activities.MenuActivity
 import hu.bme.aut.tactic.databinding.NewOfflineGameDialogBinding
+import hu.bme.aut.tactic.model.Game
 
 class NewOfflineGameDialog(context: Context) : Dialog(context){
     private lateinit var binding: NewOfflineGameDialogBinding
@@ -22,10 +23,14 @@ class NewOfflineGameDialog(context: Context) : Dialog(context){
         this.setCancelable(false)
 
         binding.btnStart.setOnClickListener {
-            if (binding.etName1.text.isEmpty() || binding.etName2.text.isEmpty()) {
+            if (binding.etNameBlue.text.isEmpty() || binding.etNameRed.text.isEmpty()) {
                 Toast.makeText(this.context, "Did you forget to type your name?", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             } else {
+                Game.getInstance().setPlayersName(
+                    binding.etNameBlue.text.toString(),
+                    binding.etNameRed.text.toString()
+                )
                 val intent = Intent(this.context, GameActivity::class.java)
                 this.context.startActivity(intent)
             }

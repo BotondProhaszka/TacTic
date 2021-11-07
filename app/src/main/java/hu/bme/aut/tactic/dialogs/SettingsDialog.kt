@@ -1,4 +1,4 @@
-package hu.bme.aut.tactic.fragments
+package hu.bme.aut.tactic.dialogs
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
@@ -23,7 +23,7 @@ import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 
 
-class SettingsFragment: DialogFragment(), AdapterView.OnItemSelectedListener{
+class SettingsDialog: DialogFragment(), AdapterView.OnItemSelectedListener{
     private lateinit var binding: SettingsFragmentBinding
     private var spinXValue = 5
     private val intArray = ArrayList<Int>()

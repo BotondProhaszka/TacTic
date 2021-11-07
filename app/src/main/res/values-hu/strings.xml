@@ -23,4 +23,6 @@
     <string name="r_u_sure_u_want_to_quit">Biztosan ki szeretnél lépni?</string>
     <string name="ok">Ok</string>
     <string name="cancel">Mégse</string>
+    <string name="join">Csatlakozás</string>
+    <string name="host">Indítás</string>
 </resources>

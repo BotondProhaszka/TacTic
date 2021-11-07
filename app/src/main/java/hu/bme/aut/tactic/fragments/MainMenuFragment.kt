@@ -2,16 +2,15 @@ package hu.bme.aut.tactic.fragments
 
  import android.content.Intent
 import android.os.Bundle
- import android.provider.ContactsContract
  import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
  import hu.bme.aut.tactic.activities.GameActivity
+ import hu.bme.aut.tactic.activities.NewOnlineGameActivity
  import hu.bme.aut.tactic.activities.ScoreActivity
  import hu.bme.aut.tactic.databinding.MainMenuFragmentBinding
- import hu.bme.aut.tactic.dialogs.NewOfflineGameDialog
- import hu.bme.aut.tactic.model.Game
+ import hu.bme.aut.tactic.dialogs.SettingsDialog
 
 class MainMenuFragment : Fragment() {
     private lateinit var binding: MainMenuFragmentBinding
@@ -25,7 +24,7 @@ class MainMenuFragment : Fragment() {
         }
 
         binding.btnOnline.setOnClickListener{
-            val intent = Intent(this.context, GameActivity::class.java)
+            val intent = Intent(this.context, NewOnlineGameActivity::class.java)
             startActivity(intent)
         }
 
@@ -35,7 +34,7 @@ class MainMenuFragment : Fragment() {
         }
 
         binding.btnSettings.setOnClickListener{
-            SettingsFragment().show(this.parentFragmentManager, "SETTINGS")
+            SettingsDialog().show(this.parentFragmentManager, "SETTINGS")
         }
         return binding.root
     }

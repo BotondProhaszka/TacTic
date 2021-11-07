@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:minWidth="200dp"
+    android:minHeight="300dp"
     android:layout_width="200dp"
     android:layout_height="300dp">
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/offline"
         app:layout_constraintBottom_toTopOf="@+id/gl05h"
         app:layout_constraintEnd_toEndOf="parent"
@@ -15,22 +17,24 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/etName1"
+        android:id="@+id/etNameBlue"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:maxLength="10"
+        android:textColor="@color/player_blue"
         android:hint="@string/name"
         app:layout_constraintBottom_toTopOf="@+id/gl05h"
         app:layout_constraintEnd_toStartOf="@+id/gl085v"
         app:layout_constraintStart_toStartOf="@+id/gl015v" />
 
     <EditText
-        android:id="@+id/etName2"
+        android:id="@+id/etNameRed"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:maxLength="10"
+        android:textColor="@color/player_red"
         android:hint="@string/name"
         app:layout_constraintEnd_toStartOf="@+id/gl085v"
         app:layout_constraintHorizontal_bias="0.517"

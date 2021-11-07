@@ -23,4 +23,8 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="online">Online</string>
+    <string name="join">join</string>
+    <string name="host">Host</string>
+    <string name="vs">VS</string>
+
 </resources>

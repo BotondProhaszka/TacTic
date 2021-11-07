@@ -2,7 +2,7 @@ package hu.bme.aut.tactic.model
 
 
 import hu.bme.aut.tactic.activities.GameActivity
-import hu.bme.aut.tactic.data.*
+import hu.bme.aut.tactic.data.Score
 
 enum class ROUND {INIT,FIRST_BASE, SEC_BASE, GAME, DRAW, BLUE_WIN, RED_WIN}
 
@@ -57,6 +57,9 @@ object Game {
         private var round: ROUND = ROUND.FIRST_BASE
         private var actual_player : PLAYER = PLAYER.BLUE
 
+        private var bluePlayer: String = ""
+        private var redPlayer: String = ""
+
         private var score = Score(null, "Player1Name", 1, "Player2Name", 2, true)
         private var clickedFrom: Field? = null
 
@@ -71,6 +74,13 @@ object Game {
             }
             return instance
         }
+
+        fun setPlayersName(blue_name: String, red_name: String){
+            bluePlayer = blue_name
+            redPlayer = red_name
+        }
+        fun getBluePlayersName(): String = bluePlayer
+        fun getRedPlayersName(): String = redPlayer
 
         fun startNewGame(width: Int, height: Int){
             round = ROUND.FIRST_BASE
