@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/proha/AndroidStudioProjects/TacTic/TacTic/app/src/main/res/drawable-anydpi/ic_nightmode.xml" value="0.2682291666666667" />
+        <entry key="..\:/Users/proha/AndroidStudioProjects/TacTic/TacTic/app/src/main/res/drawable-anydpi/ic_settings.xml" value="0.3828125" />
         <entry key="..\:/Users/proha/AndroidStudioProjects/TacTic/TacTic/app/src/main/res/drawable/ic_outline_brightness_low_24.xml" value="0.2203125" />
         <entry key="..\:/Users/proha/AndroidStudioProjects/TacTic/TacTic/app/src/main/res/drawable/ic_twotone_brightness_3_24.xml" value="0.2682291666666667" />
         <entry key="..\:/Users/proha/AndroidStudioProjects/TacTic/TacTic/app/src/main/res/drawable/ic_twotone_brightness_low_24.xml" value="0.2682291666666667" />
@@ -14,6 +15,7 @@
         <entry key="..\:/Users/proha/AndroidStudioProjects/TacTic/TacTic/app/src/main/res/layout/activity_start_online_game.xml" value="0.2682291666666667" />
         <entry key="..\:/Users/proha/AndroidStudioProjects/TacTic/TacTic/app/src/main/res/layout/host_game_fragment.xml" value="0.15942028985507245" />
         <entry key="..\:/Users/proha/AndroidStudioProjects/TacTic/TacTic/app/src/main/res/layout/join_game_fragment.xml" value="0.15942028985507245" />
+        <entry key="..\:/Users/proha/AndroidStudioProjects/TacTic/TacTic/app/src/main/res/layout/join_game_row.xml" value="0.2890625" />
         <entry key="..\:/Users/proha/AndroidStudioProjects/TacTic/TacTic/app/src/main/res/layout/main_menu_fragment.xml" value="0.22864583333333333" />
         <entry key="..\:/Users/proha/AndroidStudioProjects/TacTic/TacTic/app/src/main/res/layout/map_fragment.xml" value="0.2838541666666667" />
         <entry key="..\:/Users/proha/AndroidStudioProjects/TacTic/TacTic/app/src/main/res/layout/new_offline_game_dialog.xml" value="0.26614583333333336" />

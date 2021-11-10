@@ -1,8 +1,11 @@
 package hu.bme.aut.tactic.dialogs
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -41,6 +44,7 @@ class SettingsDialog: DialogFragment(), AdapterView.OnItemSelectedListener{
         setThemeListener()
         initSpinners()
 
+
         binding.btnApply.setOnClickListener{
             val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
             val editor: SharedPreferences.Editor = sp.edit()
@@ -56,7 +60,16 @@ class SettingsDialog: DialogFragment(), AdapterView.OnItemSelectedListener{
         return binding.root
     }
 
-
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val dialog: Dialog? = dialog
+        if (dialog != null) {
+            val width = ViewGroup.LayoutParams.MATCH_PARENT
+            val height = ViewGroup.LayoutParams.MATCH_PARENT
+            dialog.window?.setLayout(width, height)
+        }
+    }
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         if(p0?.id == R.id.spinnerX)

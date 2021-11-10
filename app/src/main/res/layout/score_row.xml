@@ -1,50 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
-    android:weightSum="21">
+    android:layout_marginStart="5dp"
+    android:layout_marginBottom="5dp"
+    android:theme="@style/Theme.TacTic">
 
     <TextView
         android:id="@+id/tvPlayer1Name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layout_weight="8"
-        android:textSize="16sp"/>
+        android:layout_margin="7dp"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@id/tvPlayer1Score"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvPlayer1Score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layout_weight="2"
-        android:textSize="13sp"/>
+        android:layout_margin="7dp"
+        android:layout_marginEnd="15dp"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvPlayer2Name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layout_weight="2"
-        android:textSize="13sp"/>
+        android:layout_margin="7dp"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@id/tvPlayer2Score"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <TextView
         android:id="@+id/tvPlayer2Score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layout_weight="8"
-        android:textSize="13sp"/>
+        android:layout_margin="7dp"
+        android:layout_marginEnd="15dp"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
         android:id="@+id/ibDeleteRow"
-        android:src="@drawable/ic_outline_delete_24"
-        android:contentDescription="@string/delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layout_weight="1" />
+        android:layout_margin="7dp"
+        android:contentDescription="@string/delete"
+        android:scaleX="0.7"
+        android:scaleY="0.7"
+        android:src="@drawable/ic_outline_delete_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

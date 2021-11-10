@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import hu.bme.aut.tactic.R
 import hu.bme.aut.tactic.adapters.MenuPagerAdapter
 import hu.bme.aut.tactic.adapters.ScoresAdapter
+import hu.bme.aut.tactic.data.ScoresDatabase
 import hu.bme.aut.tactic.databinding.ActivityMenuBinding
 import kotlin.concurrent.thread
 import kotlin.system.exitProcess
@@ -21,6 +22,8 @@ class MenuActivity : AppCompatActivity() {
     private lateinit var  sharedPreferences: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
     private lateinit var adapter: ScoresAdapter
+    private lateinit var database: ScoresDatabase
+
 
     private var themeId : Int = 0;
 
@@ -37,7 +40,10 @@ class MenuActivity : AppCompatActivity() {
 
         binding = ActivityMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.vpMenu.adapter = MenuPagerAdapter(this)
+        val vpadapter = MenuPagerAdapter(this)
+        binding.vpMenu.adapter = vpadapter
+        database = ScoresDatabase.getDatabase(this)
+        vpadapter.setDatabase(database)
         thread {
             val sp = PreferenceManager.getDefaultSharedPreferences(this)
             val editor: SharedPreferences.Editor = sp.edit()

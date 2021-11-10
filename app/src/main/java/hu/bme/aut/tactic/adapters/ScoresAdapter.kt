@@ -1,5 +1,6 @@
 package hu.bme.aut.tactic.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +11,7 @@ class ScoresAdapter (private val listener: ScoreClickListener) :
     RecyclerView.Adapter<ScoresAdapter.ScoreViewHolder>(){
 
     private val items = mutableListOf<Score>()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =  ScoreViewHolder(ScoreRowBinding.inflate(
         LayoutInflater.from(parent.context), parent, false)
     )
@@ -43,7 +45,7 @@ class ScoresAdapter (private val listener: ScoreClickListener) :
         notifyDataSetChanged()
     }
 
-    fun remove(score: Score){
+    private fun remove(score: Score){
         items.remove(score)
         listener.onScoreDeleted(score)
         notifyDataSetChanged()

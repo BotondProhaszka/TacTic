@@ -47,7 +47,7 @@ enum class SIGN (val value: Int) {
     }
 }
 
-object Game {
+public object Game {
         private var instance = Game
 
         private lateinit var map : ArrayList<ArrayList<Field>>
@@ -56,9 +56,8 @@ object Game {
         private var mapHeight = 0
         private var round: ROUND = ROUND.FIRST_BASE
         private var actual_player : PLAYER = PLAYER.BLUE
-
-        private var bluePlayer: String = ""
-        private var redPlayer: String = ""
+        private var bluePlayer: PlayerUser? = null
+        private var redPlayer: PlayerUser? = null
 
         private var score = Score(null, "Player1Name", 1, "Player2Name", 2, true)
         private var clickedFrom: Field? = null
@@ -75,13 +74,22 @@ object Game {
             return instance
         }
 
-        fun setPlayersName(blue_name: String, red_name: String){
-            bluePlayer = blue_name
-            redPlayer = red_name
+        fun setPlayers(blue_name: String, red_name: String){
+            bluePlayer = PlayerUser(blue_name, 0, PLAYER.BLUE)
+            redPlayer = PlayerUser(red_name, 0, PLAYER.RED)
         }
-        fun getBluePlayersName(): String = bluePlayer
-        fun getRedPlayersName(): String = redPlayer
+        fun getBluePlayersName(): String{
+            if(bluePlayer != null)
+                return bluePlayer?.name.toString()
+            return ""
 
+        }
+        fun getRedPlayersName(): String {
+            if (redPlayer != null)
+                return redPlayer?.name.toString()
+            return ""
+
+        }
         fun startNewGame(width: Int, height: Int){
             round = ROUND.FIRST_BASE
             setMap(width, height)

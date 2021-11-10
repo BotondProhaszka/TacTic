@@ -4,6 +4,8 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
@@ -48,6 +50,17 @@ class RestartGameDialog(context: Context, score: Score): Dialog(context) {
                 editor.putBoolean("SHOULD_SHOW_NEW_GAME_DIALOG", true)
                 editor.apply()
             }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        this?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val dialog: Dialog? = this
+        if (dialog != null) {
+            val width = ViewGroup.LayoutParams.MATCH_PARENT
+            val height = ViewGroup.LayoutParams.MATCH_PARENT
+            dialog.window?.setLayout(width, height)
         }
     }
 

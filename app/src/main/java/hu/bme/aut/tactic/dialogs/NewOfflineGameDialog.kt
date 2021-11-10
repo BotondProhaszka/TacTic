@@ -3,7 +3,10 @@ package hu.bme.aut.tactic.dialogs
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.ViewGroup
 import android.view.Window
 import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
@@ -27,13 +30,24 @@ class NewOfflineGameDialog(context: Context) : Dialog(context){
                 Toast.makeText(this.context, "Did you forget to type your name?", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             } else {
-                Game.getInstance().setPlayersName(
+                Game.getInstance().setPlayers(
                     binding.etNameBlue.text.toString(),
                     binding.etNameRed.text.toString()
                 )
                 val intent = Intent(this.context, GameActivity::class.java)
                 this.context.startActivity(intent)
             }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        this?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val dialog: Dialog? = this
+        if (dialog != null) {
+            val width = ViewGroup.LayoutParams.MATCH_PARENT
+            val height = ViewGroup.LayoutParams.MATCH_PARENT
+            dialog.window?.setLayout(width, height)
         }
     }
 

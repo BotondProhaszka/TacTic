@@ -15,7 +15,7 @@
         <item name="android:bottomRightRadius">9dp</item>
         <item name="android:topLeftRadius">9dp</item>
         <item name="android:topRightRadius">9dp</item>
-
+        <item name="dialogCornerRadius">10dp</item>
 
     </style>
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">

@@ -28,10 +28,12 @@ class MainMenuFragment : Fragment() {
             startActivity(intent)
         }
 
+        /*
         binding.btnScores.setOnClickListener{
             val intent = Intent(this.context, ScoreActivity::class.java)
             startActivity(intent)
         }
+        */
 
         binding.btnSettings.setOnClickListener{
             SettingsDialog().show(this.parentFragmentManager, "SETTINGS")
