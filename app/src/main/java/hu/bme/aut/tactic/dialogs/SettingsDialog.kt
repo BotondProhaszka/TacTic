@@ -24,6 +24,7 @@ import hu.bme.aut.tactic.databinding.SettingsFragmentBinding
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
+import kotlin.random.Random
 
 
 class SettingsDialog: DialogFragment(), AdapterView.OnItemSelectedListener{
@@ -43,7 +44,7 @@ class SettingsDialog: DialogFragment(), AdapterView.OnItemSelectedListener{
         initTheme()
         setThemeListener()
         initSpinners()
-
+        initPlayerName()
 
         binding.btnApply.setOnClickListener{
             val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
@@ -52,6 +53,7 @@ class SettingsDialog: DialogFragment(), AdapterView.OnItemSelectedListener{
             editor.putInt("MAP_HEIGHT_POS", binding.spinnerY.selectedItemPosition)
             editor.putInt("MAP_WIDTH_VAL", binding.spinnerX.selectedItem as Int)
             editor.putInt("MAP_HEIGHT_VAL", binding.spinnerY.selectedItem as Int)
+            editor.putString("PLAYER_NAME", binding.etPlayerName.text.toString())
             editor.apply()
             dialog?.dismiss()
         }
@@ -133,5 +135,15 @@ class SettingsDialog: DialogFragment(), AdapterView.OnItemSelectedListener{
                 binding.ibNightmode.setImageResource(R.drawable.ic_twotone_brightness_3_24)
             }
         }
+    }
+
+
+    private fun initPlayerName(){
+        val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
+        val editor: SharedPreferences.Editor = sp.edit()
+
+        val rndNumb = Random.nextInt(1000000)
+        binding.etPlayerName.setText(sp.getString("PLAYER_NAME", "guestPlayer$rndNumb"))
+
     }
 }

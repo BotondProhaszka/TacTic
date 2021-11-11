@@ -1,6 +1,9 @@
 package hu.bme.aut.tactic.fragments
 
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,13 +15,13 @@ import com.google.firebase.database.ValueEventListener
 import hu.bme.aut.tactic.adapters.JoinGameAdapter
 import hu.bme.aut.tactic.adapters.ScoresAdapter
 import hu.bme.aut.tactic.databinding.JoinGameFragmentBinding
-import hu.bme.aut.tactic.model.OnlineHostLobby
 import kotlin.concurrent.thread
 import com.google.firebase.database.DatabaseError
 
 import com.google.firebase.database.DataSnapshot
-
-
+import hu.bme.aut.tactic.activities.GameActivity
+import hu.bme.aut.tactic.model.*
+import kotlin.random.Random
 
 
 class JoinGameFragment: Fragment(), JoinGameAdapter.JoinGameClickListener{
@@ -41,7 +44,7 @@ class JoinGameFragment: Fragment(), JoinGameAdapter.JoinGameClickListener{
             getRooms()
         }
 
-        database.getReference("hostRooms").addValueEventListener(object : ValueEventListener {
+        database.getReference("gameRooms").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 getRooms()
             }
@@ -75,12 +78,14 @@ class JoinGameFragment: Fragment(), JoinGameAdapter.JoinGameClickListener{
     private fun getRooms() {
         adapter.clear()
         games.clear()
-        database.getReference("hostRooms").get().addOnSuccessListener {
+        database.getReference("lobbies").get().addOnSuccessListener {
             if (!firstLoad)
                 for (a in it.children) {
+                    Log.d("Bugfix", "$a")
                     val ohl = OnlineHostLobby(
                         a.child("id").value.toString().toInt(),
                         a.child("lobbyName").value.toString(),
+                        a.child("hostPlayerName").value.toString(),
                         a.child("width").value.toString().toInt(),
                         a.child("height").value.toString().toInt()
                     )
@@ -96,7 +101,19 @@ class JoinGameFragment: Fragment(), JoinGameAdapter.JoinGameClickListener{
     }
 
     override fun onOnlineHostLobbyClicked(onlineHostLobby: OnlineHostLobby) {
-        TODO("Not yet implemented")
+        //val onlineGameTransferObj = OnlineGameTransferObj(onlineHostLobby)
+        val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
+        val onlineGameTransferObj = OnlineGameTransferObj(sp.getString("PLAYER_NAME", "Red Player").toString())
+        val editor: SharedPreferences.Editor = sp.edit()
+        editor.putBoolean("SHOULD_SHOW_NEW_GAME_DIALOG", false)
+        editor.apply()
+        //onlineGameTransferObj.redPlayer = sp.getString("PLAYER_NAME", "red player").toString()
+
+
+        database.getReference("gameRooms").child(onlineHostLobby.getConnString()).setValue(onlineGameTransferObj)
+        OnlineGame.getInstance().onlineGameTransferObj = onlineGameTransferObj
+        val intent = Intent(requireContext(), GameActivity::class.java)
+        startActivity(intent)
     }
 
 }

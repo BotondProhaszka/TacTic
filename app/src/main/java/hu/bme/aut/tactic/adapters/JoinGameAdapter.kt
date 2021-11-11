@@ -22,6 +22,9 @@ class JoinGameAdapter (private val listener: JoinGameClickListener) :
         holder.binding.tvLobbyName.text = onlineHostLobby.lobbyName
         holder.binding.tvWidth.text = onlineHostLobby.width.toString()
         holder.binding.tvHeight.text = onlineHostLobby.height.toString()
+        holder.binding.joinRow.setOnClickListener {
+            listener.onOnlineHostLobbyClicked(onlineHostLobby)
+        }
     }
 
     fun addOnlineHostLobby(onlineHostLobby: OnlineHostLobby){

@@ -47,7 +47,7 @@ enum class SIGN (val value: Int) {
     }
 }
 
-public object Game {
+object Game {
         private var instance = Game
 
         private lateinit var map : ArrayList<ArrayList<Field>>
@@ -60,9 +60,15 @@ public object Game {
         private var redPlayer: PlayerUser? = null
 
         private var score = Score(null, "Player1Name", 1, "Player2Name", 2, true)
+
         private var clickedFrom: Field? = null
 
         private lateinit var gameActivity: GameActivity
+
+
+        private lateinit var onlineGameTransferObj: OnlineGameTransferObj
+
+
 
         fun getInstance(): Game {
             if (instance == null) {
@@ -75,8 +81,8 @@ public object Game {
         }
 
         fun setPlayers(blue_name: String, red_name: String){
-            bluePlayer = PlayerUser(blue_name, 0, PLAYER.BLUE)
-            redPlayer = PlayerUser(red_name, 0, PLAYER.RED)
+            bluePlayer = PlayerUser(blue_name, PLAYER.BLUE)
+            redPlayer = PlayerUser(red_name, PLAYER.RED)
         }
         fun getBluePlayersName(): String{
             if(bluePlayer != null)
@@ -133,6 +139,20 @@ public object Game {
         fun getMapWidth(): Int { return mapWidth }
         fun getMapHeight(): Int { return mapHeight }
         fun getScore(): Score { return score }
+
+
+
+        fun getOnlineGameTransferObj() : OnlineGameTransferObj = onlineGameTransferObj
+        fun setOnlineGameTransferObj(onlineGameTransferObj: OnlineGameTransferObj) {
+            this.onlineGameTransferObj = onlineGameTransferObj
+        }
+
+
+
+
+
+
+
 
         private fun changePlayer(){
             actual_player = getOtherPlayer(actual_player)

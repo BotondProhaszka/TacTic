@@ -31,5 +31,6 @@
     <string name="scoreboard">Scoreboard</string>
     <string name="reload">Reload</string>
     <string name="online_rooms">Online rooms</string>
+    <string name="playername">PlayerName</string>
 
 </resources>
