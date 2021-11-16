@@ -34,11 +34,13 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
 
     init {
         val game = Game.getInstance()
+        game.setMapView(this)
         mapWidth = game.getMapWidth()
         mapHeight = game.getMapHeight()
 
         paint.style = Paint.Style.FILL
         paint.strokeWidth = 6F
+        invalidate()
     }
 
     fun clearMap(){
@@ -128,6 +130,7 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
                 val x = ceil(xTemp.toDouble()).toInt()
                 val y = ceil(yTemp.toDouble()).toInt()
                 if(x <= mapWidth && y <= mapHeight && x > 0 && y > 0) {
+                    game.clickedFromOnline = false
                     game.clickedOn(x,y)
                     this.invalidate()
                 }

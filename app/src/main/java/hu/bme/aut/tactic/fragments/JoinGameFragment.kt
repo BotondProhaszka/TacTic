@@ -81,7 +81,6 @@ class JoinGameFragment: Fragment(), JoinGameAdapter.JoinGameClickListener{
         database.getReference("lobbies").get().addOnSuccessListener {
             if (!firstLoad)
                 for (a in it.children) {
-                    Log.d("Bugfix", "$a")
                     val ohl = OnlineHostLobby(
                         a.child("id").value.toString().toInt(),
                         a.child("lobbyName").value.toString(),
@@ -101,17 +100,40 @@ class JoinGameFragment: Fragment(), JoinGameAdapter.JoinGameClickListener{
     }
 
     override fun onOnlineHostLobbyClicked(onlineHostLobby: OnlineHostLobby) {
-        //val onlineGameTransferObj = OnlineGameTransferObj(onlineHostLobby)
         val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
+        Game.getInstance().setSharedPreferences(sp)
         val onlineGameTransferObj = OnlineGameTransferObj(sp.getString("PLAYER_NAME", "Red Player").toString())
+
+        onlineGameTransferObj.blueName = onlineHostLobby.hostPlayerName
+        Game.getInstance().setOnlinePlayerName(onlineGameTransferObj.redName)
+
+        val randFirstPlayer = when ((0..1).random()) {
+            0 -> onlineGameTransferObj.blueName
+            1 -> onlineGameTransferObj.redName
+            else -> onlineGameTransferObj.blueName
+        }
+        onlineGameTransferObj.lastPlayer = randFirstPlayer
+
+
+        database.getReference("gameRooms").child(onlineHostLobby.getConnString()).child("ogto").setValue(onlineGameTransferObj)
+        database.getReference("lobbies").child(onlineHostLobby.lobbyName).removeValue()
+
+
+
+        if(onlineGameTransferObj.blueName == onlineGameTransferObj.lastPlayer)
+            Game.getInstance().setFirstPlayer(PLAYER.RED)
+        else
+            Game.getInstance().setFirstPlayer(PLAYER.BLUE)
+
+        Game.getInstance().setOnlineGameTransferObj(onlineGameTransferObj)
+        Game.getInstance().setOnlineHostLobby(onlineHostLobby)
+        Game.getInstance().isOnline(true)
+        Game.getInstance().startNewGame()
+
         val editor: SharedPreferences.Editor = sp.edit()
         editor.putBoolean("SHOULD_SHOW_NEW_GAME_DIALOG", false)
         editor.apply()
-        //onlineGameTransferObj.redPlayer = sp.getString("PLAYER_NAME", "red player").toString()
 
-
-        database.getReference("gameRooms").child(onlineHostLobby.getConnString()).setValue(onlineGameTransferObj)
-        OnlineGame.getInstance().onlineGameTransferObj = onlineGameTransferObj
         val intent = Intent(requireContext(), GameActivity::class.java)
         startActivity(intent)
     }

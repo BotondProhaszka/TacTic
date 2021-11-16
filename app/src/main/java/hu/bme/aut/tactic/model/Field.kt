@@ -1,5 +1,7 @@
 package hu.bme.aut.tactic.model
 
+import kotlin.math.abs
+
 
 class Field(var x: Int, var y: Int) {
     private var player: PLAYER? = null
@@ -45,23 +47,23 @@ class Field(var x: Int, var y: Int) {
         return true
     }
 
-    fun isEmpty() : Boolean {return (player == null)}
+    //fun isEmpty() : Boolean {return (player == null)}
 
     fun attackFrom(from: Field): Boolean{
-        if(this.player != from.player){
-
+        if(this.player == from.player)
+            return false
+            if(!this.isNeighbour(from))
+                return false
             when {
                 this.sign == SIGN.BASE -> {
                     return if (from.sign!!.value >= 2) {
-                        Game.getInstance().playerWins(from.getPlayer()!!)
+                        Game.getInstance().gameOver(from.getPlayer())
                         this.setPlayer(from.getPlayer()!!)
-                        //return Field(x, y, from.getPlayer(), SIGN.BASE, false)
                         true
                     } else
                         false
                 }
                 from.sign!!.minus(this.sign!!) >= 1 -> {
-                    //return Field(x, y, from.getPlayer(), from.sign!!.getMinus(this.sign!!), false)
                     this.setPlayer(from.getPlayer()!!)
                     this.setSign(from.sign!!.getMinus(this.sign!!))
                     return true
@@ -73,7 +75,18 @@ class Field(var x: Int, var y: Int) {
                     return true
                 }
             }
-        }
+
+        return false
+    }
+
+
+    fun isNeighbour(field: Field) : Boolean{
+        if(this.x == field.x)
+            if(abs(this.y - field.y) <= 1)
+                return true
+        if(this.y == field.y)
+            if(abs(this.x - field.x) <= 1)
+                return true
         return false
     }
 }

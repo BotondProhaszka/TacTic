@@ -1,12 +1,12 @@
 package hu.bme.aut.tactic.model
 
-class OnlineGameTransferObj (val redName: String) {
-    private lateinit var blueName: String
+data class OnlineGameTransferObj(var redName : String) {
+     constructor() : this("") {}
+     var blueName: String = ""
 
-    private lateinit var field : Field
+     var x: Int = 0
+     var y: Int = 0
 
-    fun setBlueName(name: String) { blueName = name }
-
-
-
+     var lastPlayer: String = ""
+     var plsStep = 0
 }

@@ -1,5 +1,6 @@
 package hu.bme.aut.tactic.activities
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -38,17 +39,19 @@ class GameActivity : AppCompatActivity() {
         initMapView()
         initPreferences()
 
+        game.setGameActivity(this)
+        game.startNewGame()
+
         binding.btnDraw.setOnClickListener {
             gameOver(game.getScore())
         }
-
     }
 
     override fun onBackPressed() {
         AlertDialog.Builder(this)
             .setMessage(R.string.r_u_sure_u_want_to_quit)
             .setPositiveButton(R.string.ok) { _, _ ->
-                var menuIntent = Intent(this, MenuActivity::class.java)
+                val menuIntent = Intent(this, MenuActivity::class.java)
                 startActivity( menuIntent, null)
             }
             .setNegativeButton(R.string.cancel, null)
@@ -59,19 +62,16 @@ class GameActivity : AppCompatActivity() {
         thread {
             database.scoreDao().insert(score)
         }
-
+        Game.getInstance().clearDatabaseAfterGame()
         RestartGameDialog(this, score).show()
     }
 
     private fun initPreferences(){
         val sp = PreferenceManager.getDefaultSharedPreferences(this)
-        val x = sp.getInt("MAP_WIDTH_VAL", 5)
-        val y = sp.getInt("MAP_HEIGHT_VAL", 5)
         val editor: SharedPreferences.Editor = sp.edit()
-        var shouldShow = sp.getBoolean("SHOULD_SHOW_NEW_GAME_DIALOG", true)
+        val shouldShow = sp.getBoolean("SHOULD_SHOW_NEW_GAME_DIALOG", true)
 
-        game.startNewGame(x, y)
-        game.setGameActivity(this)
+
 
         if(shouldShow) {
             editor.putBoolean("SHOULD_SHOW_NEW_GAME_DIALOG", false)
@@ -81,10 +81,15 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("InflateParams")
     private fun initMapView(){
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val mapView: View = inflater.inflate(R.layout.map_view, null)
         val parent = binding.view
         parent.addView(mapView, parent.childCount -1)
     }
+
+
+    fun getContext(): Context = this
+
 }

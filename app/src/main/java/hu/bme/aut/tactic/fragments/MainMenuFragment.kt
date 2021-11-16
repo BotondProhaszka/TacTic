@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
  import hu.bme.aut.tactic.activities.ScoreActivity
  import hu.bme.aut.tactic.databinding.MainMenuFragmentBinding
  import hu.bme.aut.tactic.dialogs.SettingsDialog
+ import hu.bme.aut.tactic.model.Game
 
 class MainMenuFragment : Fragment() {
     private lateinit var binding: MainMenuFragmentBinding
@@ -19,6 +20,7 @@ class MainMenuFragment : Fragment() {
         binding = MainMenuFragmentBinding.inflate(inflater, container, false)
 
         binding.btnOffline.setOnClickListener {
+            Game.getInstance().isOnline(false)
             val intent = Intent(this.context, GameActivity::class.java)
             startActivity(intent)
         }

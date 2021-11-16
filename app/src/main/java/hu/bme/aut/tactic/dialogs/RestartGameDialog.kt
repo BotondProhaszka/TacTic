@@ -20,6 +20,7 @@ import hu.bme.aut.tactic.activities.MenuActivity
 import hu.bme.aut.tactic.data.Score
 import hu.bme.aut.tactic.databinding.RestartGameDialogBinding
 import hu.bme.aut.tactic.model.Game
+import java.lang.Exception
 import kotlin.concurrent.thread
 
 class RestartGameDialog(context: Context, score: Score): Dialog(context) {
@@ -39,12 +40,13 @@ class RestartGameDialog(context: Context, score: Score): Dialog(context) {
             dismiss()
         }
 
-        binding.btnMenu.setOnClickListener{
+        binding.btnMenu.setOnClickListener {
+
             Log.d("Bugfix", "btnMenu clicked")
             val intent = Intent(this.context, MenuActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(context, intent, null)
-            thread{
+            thread {
                 val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
                 val editor: SharedPreferences.Editor = sp.edit()
                 editor.putBoolean("SHOULD_SHOW_NEW_GAME_DIALOG", true)

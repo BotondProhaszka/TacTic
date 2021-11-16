@@ -42,13 +42,13 @@ class NewOfflineGameDialog(context: Context) : Dialog(context){
 
     override fun onStart() {
         super.onStart()
-        this?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        val dialog: Dialog? = this
-        if (dialog != null) {
-            val width = ViewGroup.LayoutParams.MATCH_PARENT
-            val height = ViewGroup.LayoutParams.MATCH_PARENT
-            dialog.window?.setLayout(width, height)
-        }
+        this.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val dialog: Dialog = this
+
+        val width = ViewGroup.LayoutParams.MATCH_PARENT
+        val height = ViewGroup.LayoutParams.MATCH_PARENT
+        dialog.window?.setLayout(width, height)
+
     }
 
     override fun onBackPressed() {
