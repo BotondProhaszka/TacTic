@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import hu.bme.aut.tactic.adapters.JoinGameAdapter
-import hu.bme.aut.tactic.adapters.ScoresAdapter
 import hu.bme.aut.tactic.databinding.JoinGameFragmentBinding
 import kotlin.concurrent.thread
 import com.google.firebase.database.DatabaseError
@@ -27,7 +26,7 @@ import kotlin.random.Random
 class JoinGameFragment: Fragment(), JoinGameAdapter.JoinGameClickListener{
     private lateinit var binding: JoinGameFragmentBinding
     private lateinit var adapter: JoinGameAdapter
-    private lateinit var database: FirebaseDatabase
+    private var database = FirebaseDatabase.getInstance("https://tactic-add7c-default-rtdb.europe-west1.firebasedatabase.app/")
     private var games : ArrayList<OnlineHostLobby> = ArrayList()
 
     private var firstLoad = true
@@ -81,15 +80,13 @@ class JoinGameFragment: Fragment(), JoinGameAdapter.JoinGameClickListener{
         database.getReference("lobbies").get().addOnSuccessListener {
             if (!firstLoad)
                 for (a in it.children) {
-                    val ohl = OnlineHostLobby(
-                        a.child("id").value.toString().toInt(),
-                        a.child("lobbyName").value.toString(),
-                        a.child("hostPlayerName").value.toString(),
-                        a.child("width").value.toString().toInt(),
-                        a.child("height").value.toString().toInt()
-                    )
-                    games.add(ohl)
-                    loadRoomsInBackground()
+                    try {
+                        val ohl = a.getValue(OnlineHostLobby::class.java)!!
+                        games.add(ohl)
+                        loadRoomsInBackground()
+                    }catch (e: Exception){
+                        Log.e("Bugfix", "JoinGameFragment getRooms: ${e.message}")
+                    }
                 }
             else
                 firstLoad = false
@@ -100,12 +97,33 @@ class JoinGameFragment: Fragment(), JoinGameAdapter.JoinGameClickListener{
     }
 
     override fun onOnlineHostLobbyClicked(onlineHostLobby: OnlineHostLobby) {
-        val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
-        Game.getInstance().setSharedPreferences(sp)
-        val onlineGameTransferObj = OnlineGameTransferObj(sp.getString("PLAYER_NAME", "Red Player").toString())
 
+        Log.d("Bugfix", "Clicked: ${onlineHostLobby.getConnString()}")
+        val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
+        onlineHostLobby.joinPlayerName = sp.getString("PLAYER_NAME", "Red Player").toString()
+        val editor: SharedPreferences.Editor = sp.edit()
+        editor.putInt("MAP_WIDTH_VAL", onlineHostLobby.width)
+        editor.putInt("MAP_HEIGHT_VAL", onlineHostLobby.height)
+        editor.apply()
+        Game.getInstance().setSharedPreferences(sp)
+        OnlineGame.getInstance().setLobby(onlineHostLobby)
+        database.getReference("lobbies").child(onlineHostLobby.lobbyName).setValue(onlineHostLobby)
+        OnlineGame.getInstance().setMyColor(PLAYER.RED)
+        OnlineGame.getInstance().setMapSize(onlineHostLobby.width, onlineHostLobby.height)
+        Log.d("Bugfix", "Clicked2: ${onlineHostLobby.getConnString()}")
+
+        val onlineGameTransferObj = OnlineGameTransferObj(0, 0, 0)
+
+        database.getReference("gameRooms").child(onlineHostLobby.getConnString()).setValue(onlineGameTransferObj)
+
+
+        val intent = Intent(requireContext(), GameActivity::class.java)
+        intent.putExtra("isOnline", true)
+        startActivity(intent)
+
+        /*
         onlineGameTransferObj.blueName = onlineHostLobby.hostPlayerName
-        Game.getInstance().setOnlinePlayerName(onlineGameTransferObj.redName)
+        OnlineGame.getInstance().setOnlinePlayerName(onlineGameTransferObj.redName)
 
         val randFirstPlayer = when ((0..1).random()) {
             0 -> onlineGameTransferObj.blueName
@@ -135,7 +153,10 @@ class JoinGameFragment: Fragment(), JoinGameAdapter.JoinGameClickListener{
         editor.apply()
 
         val intent = Intent(requireContext(), GameActivity::class.java)
+        intent.putExtra("isOnline", true)
         startActivity(intent)
+         */
+
     }
 
 }

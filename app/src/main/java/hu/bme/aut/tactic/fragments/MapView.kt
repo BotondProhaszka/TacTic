@@ -8,11 +8,8 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import hu.bme.aut.tactic.R
-import hu.bme.aut.tactic.model.Field
-import hu.bme.aut.tactic.model.Game
-import hu.bme.aut.tactic.model.PLAYER
-import hu.bme.aut.tactic.model.SIGN
+import hu.bme.aut.tactic.interfaces.GameInterface
+import hu.bme.aut.tactic.model.*
 import kotlin.math.ceil
 
 val MIN_CELL_SIZE = 80f
@@ -27,16 +24,17 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
     private var cellHeight = 0F
     private var correct = 9F
 
-    private var game = Game.getInstance()
+    private var game: GameInterface = OnlineGame.getInstance()
 
 
     private lateinit var canvas: Canvas
 
     init {
-        val game = Game.getInstance()
+
         game.setMapView(this)
         mapWidth = game.getMapWidth()
         mapHeight = game.getMapHeight()
+        Log.d("Bugfix", "Mapview size $mapWidth:$mapHeight")
 
         paint.style = Paint.Style.FILL
         paint.strokeWidth = 6F
@@ -84,7 +82,6 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
         when(game.getActualPlayer()){
             PLAYER.BLUE -> paint.setARGB(255, 0, 0, 255)
             PLAYER.RED -> paint.setARGB(255, 255, 0, 0)
-            else -> paint.color = R.color.asphalt
         }
         for (i in 0..mapWidth + 1) //fuggoleges
             canvas.drawLine(
@@ -130,7 +127,6 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
                 val x = ceil(xTemp.toDouble()).toInt()
                 val y = ceil(yTemp.toDouble()).toInt()
                 if(x <= mapWidth && y <= mapHeight && x > 0 && y > 0) {
-                    game.clickedFromOnline = false
                     game.clickedOn(x,y)
                     this.invalidate()
                 }

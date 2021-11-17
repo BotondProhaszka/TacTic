@@ -1,71 +1,27 @@
 package hu.bme.aut.tactic.model
 
 
-import android.content.Intent
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import android.util.Log
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import hu.bme.aut.tactic.interfaces.GameInterface
 import hu.bme.aut.tactic.activities.GameActivity
 import hu.bme.aut.tactic.data.Score
 import hu.bme.aut.tactic.fragments.MapView
 import java.lang.Exception
-import java.security.spec.ECField
 
-enum class ROUND {INIT,FIRST_BASE, SEC_BASE, GAME, DRAW, BLUE_WIN, RED_WIN}
-
-enum class PLAYER {
-    RED, BLUE
-
-}
-
-enum class SIGN (val value: Int) {
-    BASE(0),
-    ONE(1),
-    TWO(2),
-    THREE(3),
-    FOUR(4),
-    FIVE(5),
-    SIX(6);
-    fun getMinus(rightSide: SIGN): SIGN {
-        return when(this.value - rightSide.value){
-            0 -> ONE
-            1 -> ONE
-            2 -> TWO
-            3 -> THREE
-            4 -> FOUR
-            5 -> FIVE
-            else -> ONE
-        }
-    }
-    fun minus(rightSide: SIGN): Int {
-        return this.value - rightSide.value
-    }
-
-    fun getNext() : SIGN {
-        return when(value){
-            0 -> ONE
-            1 -> TWO
-            2 -> THREE
-            3 -> FOUR
-            4 -> FIVE
-            5 -> SIX
-            else -> BASE
-        }
-    }
-}
-
-object Game {
-    private var instance = Game
-
-    private var isOnline = false
-    private lateinit var onlinePlayerName: String
-    private lateinit var firebaseDatabase: FirebaseDatabase
+object Game: GameInterface {
+    private val instance = Game
 
     private lateinit var map: ArrayList<ArrayList<Field>>
+
+    private lateinit var gameActivity: GameActivity
+    private lateinit var sp: SharedPreferences
+    private lateinit var mapView: MapView
+    private var clickedFrom: Field? = null
+
+    private var clickCounter = 0
+
 
     private var mapWidth = 0
     private var mapHeight = 0
@@ -76,69 +32,31 @@ object Game {
 
     private var score = Score(null, "Player1Name", 1, "Player2Name", 2, true)
 
-    private var clickedFrom: Field? = null
-
-    private lateinit var gameActivity: GameActivity
-
-
-    private lateinit var onlineGameTransferObj: OnlineGameTransferObj
-    private lateinit var lobby: OnlineHostLobby
-
-    private lateinit var sp: SharedPreferences
-
-    private lateinit var mapView: MapView
-
-    var clickedFromOnline = false
-
-    fun getInstance(): Game {
-        return instance
-    }
+    fun getInstance(): Game = instance
 
     fun setPlayers(blue_name: String, red_name: String) {
         bluePlayer = PlayerUser(blue_name, PLAYER.BLUE)
         redPlayer = PlayerUser(red_name, PLAYER.RED)
     }
 
-    fun getBluePlayersName(): String {
-        if (isOnline)
-            return onlineGameTransferObj.blueName
-        if (bluePlayer != null)
-            return bluePlayer?.name.toString()
-        return ""
+    override fun getBluePlayersName() : String = bluePlayer?.name.toString()
+    override fun getRedPlayersName() : String = redPlayer?.name.toString()
 
-    }
 
-    fun getRedPlayersName(): String {
-        if (isOnline)
-            return onlineGameTransferObj.redName
-        if (redPlayer != null)
-            return redPlayer?.name.toString()
-        return ""
 
-    }
+    override fun startNewGame(firstPlayer: PLAYER?) {
 
-    fun startNewGame() {
-        synchronized(this) {
-            if (isOnline) {
-                setMap(lobby.width, lobby.height)
-                round = ROUND.FIRST_BASE
-                firebaseDatabase =
-                    FirebaseDatabase.getInstance("https://tactic-add7c-default-rtdb.europe-west1.firebasedatabase.app/")
-                if (actual_player == PLAYER.BLUE)
-                    onlineGameTransferObj.lastPlayer = onlineGameTransferObj.redName
-                else
-                    onlineGameTransferObj.lastPlayer = onlineGameTransferObj.blueName
-                setOnlineListener()
-            } else {
-                setRandomFirstPlayer()
-                val spr = PreferenceManager.getDefaultSharedPreferences(gameActivity.getContext())
-                val x = spr.getInt("MAP_WIDTH_VAL", 5)
-                val y = spr.getInt("MAP_HEIGHT_VAL", 5)
-                round = ROUND.FIRST_BASE
-                setMap(x, y)
-            }
-            Log.d("Bugfix", "First player: $actual_player")
-        }
+        if(firstPlayer == null)
+            setRandomFirstPlayer()
+        else
+            actual_player = firstPlayer
+
+        round = ROUND.FIRST_BASE
+        val spr = PreferenceManager.getDefaultSharedPreferences(gameActivity.getContext())
+        val x = spr.getInt("MAP_WIDTH_VAL", 5)
+        val y = spr.getInt("MAP_HEIGHT_VAL", 5)
+
+        setMap(x, y)
     }
 
     fun restartGame() {
@@ -171,125 +89,58 @@ object Game {
         }
     }
 
-    fun setFirstPlayer(player : PLAYER){
-        actual_player = player
-    }
-    fun setGameActivity(gameActivity: GameActivity) {
+    override fun setGameActivity(gameActivity: GameActivity) {
         this.gameActivity = gameActivity
     }
 
-    @JvmName("getMap1")
-    fun getMap(): ArrayList<ArrayList<Field>> {
+    fun getGameActivity() : GameActivity = gameActivity
+
+    override fun getMap(): ArrayList<ArrayList<Field>> {
         return map
     }
 
-    fun getActualPlayer(): PLAYER {
+    override fun getActualPlayer(): PLAYER {
         return actual_player
     }
 
-    fun getMapWidth(): Int {
+    override fun getMapWidth(): Int {
         return mapWidth
     }
 
-    fun getMapHeight(): Int {
+    override fun getMapHeight(): Int {
         return mapHeight
     }
 
-    fun getScore(): Score {
+    override fun closeGameRoom() { }
+    override fun getFirstPlayer(): PLAYER? {
+        return null
+    }
+
+    override fun getScore(): Score {
         return score
     }
 
-    fun isOnline(): Boolean = isOnline
-    fun isOnline(isOnline: Boolean) {
-        this.isOnline = isOnline
-    }
-
-    fun getOnlineGameTransferObj(): OnlineGameTransferObj = onlineGameTransferObj
-    fun setOnlineGameTransferObj(onlineGameTransferObj: OnlineGameTransferObj) {
-        this.onlineGameTransferObj = onlineGameTransferObj
-
-    }
-
-    fun getOnlineHostLobby(): OnlineHostLobby = lobby
-    fun setOnlineHostLobby(onlineHostLobby: OnlineHostLobby) {
-        lobby = onlineHostLobby
-    }
-
-    fun getOnlinePlayerName(): String = onlinePlayerName
-    fun setOnlinePlayerName(name: String) {
-        onlinePlayerName = name
-    }
 
     fun setSharedPreferences(sp: SharedPreferences) {
         this.sp = sp
     }
 
-    fun clearDatabaseAfterGame(){
-        if(isOnline)
-            firebaseDatabase.getReference("gameRooms").child(lobby.getConnString()).removeValue()
-    }
-
-    fun setMapView(view: MapView){
+    override fun setMapView(view: MapView){
         this.mapView = view
     }
 
-    fun setOnlineListener() {
-        firebaseDatabase.getReference("gameRooms").child(lobby.getConnString())
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    synchronized(this) {
-                        if (snapshot.value == null) {
-                            gameOverDraw()
-                            return
-                        }
-                        if(snapshot.child("readable").value == true) {
-                            firebaseDatabase.getReference("gameRooms").child(lobby.getConnString()).child("readable").setValue(false)
-                            onlineChange(snapshot)
-                        }
-                    }
-                }
+    fun getClickCounter() : Int = clickCounter
 
-                override fun onCancelled(error: DatabaseError) {
-                    Log.w("Bugfix", "Failed to read value.", error.toException())
-                }
-            })
+
+    fun setMapSize(x: Int, y: Int){
+        mapWidth = x
+        mapHeight = y
     }
-
-    private fun onlineChange(snapshot: DataSnapshot){
-        if (snapshot.child("readable").value == false)
-            return
-
-        firebaseDatabase.getReference("gameRooms").child(lobby.getConnString()).child("readable").setValue(false)
-
-        onlineGameTransferObj = snapshot.child("ogto").getValue(OnlineGameTransferObj::class.java) ?: return
-
-        if(onlineGameTransferObj.lastPlayer == onlinePlayerName)
-            return
-
-
-        if (onlineGameTransferObj.plsStep == 1) {
-            onlineGameTransferObj.plsStep = 0;
-            clickedFromOnline = true
-            clickedOn(onlineGameTransferObj.x, onlineGameTransferObj.y)
-        }
-    }
-
-
 
     private fun playerStepped(x: Int, y: Int) {
-        if (isOnline) {
-            onlineGameTransferObj.x = x
-            onlineGameTransferObj.y = y
-            onlineGameTransferObj.lastPlayer = onlinePlayerName
-            onlineGameTransferObj.plsStep = 1
-            firebaseDatabase.getReference("gameRooms").child(lobby.getConnString()).child("ogto").setValue(onlineGameTransferObj)
-            firebaseDatabase.getReference("gameRooms").child(lobby.getConnString()).child("readable").setValue(true)
-        }
-        if(false){//!clickedFromOnline) {
             actual_player = getOtherPlayer(actual_player)
             removeClickedFrom()
             mapView.invalidate()
-        }
     }
 
     private fun getOtherPlayer(player: PLAYER): PLAYER {
@@ -304,29 +155,19 @@ object Game {
     }
 
     fun gameOver(winner: PLAYER?) {
-        clearDatabaseAfterGame()
         restartGame()
         gameActivity.gameOver(score)
     }
 
-    fun clickedOn(x: Int, y: Int){
-        synchronized(this){
-            clickedOnSyn(x,y)
-        }
-    }
-
-    fun clickedOnSyn(x: Int, y: Int) {
+    override fun clickedOn(x: Int, y: Int) {
+        Log.d("Bugfix", "Game.clickedOn()")
         if (round != ROUND.FIRST_BASE && round != ROUND.SEC_BASE)
             if (!hasCorrectNeighbour(x, y)) {
                 if (clickedFrom != null)
                     removeClickedFrom()
                 return
             }
-
-        if(isOnline)
-            if(onlineGameTransferObj.lastPlayer == onlinePlayerName && !clickedFromOnline)
-                return
-
+        clickCounter++
         when (round) {
             ROUND.FIRST_BASE -> {
                 map[x][y] = Field(x, y, actual_player, SIGN.BASE, false)

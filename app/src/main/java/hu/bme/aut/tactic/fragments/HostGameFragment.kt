@@ -17,12 +17,11 @@ import com.google.firebase.database.ValueEventListener
 import hu.bme.aut.tactic.activities.GameActivity
 import hu.bme.aut.tactic.databinding.HostGameFragmentBinding
 import hu.bme.aut.tactic.model.*
-import kotlin.concurrent.thread
 
 class HostGameFragment: Fragment() {
     private lateinit var binding: HostGameFragmentBinding
-    private lateinit var database: FirebaseDatabase
-    private var onlineHostLobby: OnlineHostLobby? = null
+    private var database = FirebaseDatabase.getInstance("https://tactic-add7c-default-rtdb.europe-west1.firebasedatabase.app/")
+    private lateinit var onlineHostLobby: OnlineHostLobby
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,9 +30,15 @@ class HostGameFragment: Fragment() {
     ): View {
         binding = HostGameFragmentBinding.inflate(LayoutInflater.from(context))
 
-        binding.btnHost.setOnClickListener { host() }
+        binding.btnHost.setOnClickListener {
+            try {
+                host()
+            } catch (e: Exception) {
+                Log.e("Bugfix", "HostGameFragment host: ${e.message}")
+            }
+        }
         binding.btnCancel.setOnClickListener {
-            database.getReference("gameRooms").child("${onlineHostLobby?.getConnString()}").removeValue()
+            database.getReference("gameRooms").child(onlineHostLobby.getConnString()).removeValue()
             cancel()
         }
 
@@ -57,23 +62,47 @@ class HostGameFragment: Fragment() {
             Toast.makeText(this.context, "Did you forget to type the name?", Toast.LENGTH_LONG).show()
             return
         }
+        onlineHostLobby = initOnlineHostLobby()
+        database.getReference("lobbies").child(onlineHostLobby.lobbyName).setValue(onlineHostLobby)
+        initJoinListener()
+        binding.btnHost.isEnabled = false
+        binding.btnCancel.isEnabled = true
+        binding.etHostGameName.isEnabled = false
+    }
 
+    private fun cancel() {
+        database.getReference("lobbies").child(onlineHostLobby.lobbyName).removeValue()
+        binding.btnHost.isEnabled = true
+        binding.btnCancel.isEnabled = false
+        binding.etHostGameName.isEnabled = true
+    }
+
+    private fun initOnlineHostLobby() : OnlineHostLobby{
         val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
         val width = sp.getInt("MAP_WIDTH_VAL", 5)
         val height = sp.getInt("MAP_HEIGHT_VAL", 5)
         val playerName = sp.getString("PLAYER_NAME", "host player").toString()
 
-        onlineHostLobby = OnlineHostLobby(binding.etHostGameName.text.toString(), playerName, width, height)
+        val randFirstPlayer = when ((0..1).random()) {
+            0 -> PLAYER.BLUE
+            1 -> PLAYER.RED
+            else -> PLAYER.BLUE
+        }
+        return OnlineHostLobby(binding.etHostGameName.text.toString(), playerName, width, height, randFirstPlayer)
+    }
 
-        database.getReference("lobbies").child("${onlineHostLobby?.lobbyName}")
-            .setValue(onlineHostLobby)
-
-        database.getReference("gameRooms").child("${onlineHostLobby?.getConnString()}")
+    private fun initJoinListener(){
+        database.getReference("lobbies").child(onlineHostLobby.lobbyName)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
+                    Log.d("Bugfix", "initJoinListener: $snapshot")
                     if(snapshot.value != null) {
-                        synchronized(this) {
-                            joined(snapshot)
+                        if (snapshot.child("joinPlayerName").value != null) {
+                            if (snapshot.child("joinPlayerName").value != "") {
+                                synchronized(this) {
+                                    joined(snapshot)
+                                }
+                            }
                         }
                     }
                 }
@@ -82,20 +111,28 @@ class HostGameFragment: Fragment() {
                     Log.w("Bugfix", "Failed to read value.", error.toException())
                 }
             })
-        binding.btnHost.isEnabled = false
-        binding.btnCancel.isEnabled = true
-        binding.etHostGameName.isEnabled = false
-    }
-
-    private fun cancel() {
-        database.getReference("lobbies").child("${onlineHostLobby?.lobbyName}").removeValue()
-        binding.btnHost.isEnabled = true
-        binding.btnCancel.isEnabled = false
-        binding.etHostGameName.isEnabled = true
     }
 
     private fun joined(snapshot: DataSnapshot){
+        Log.d("Bugfix", "Host JOINED")
         try {
+            val ohl = snapshot.getValue(OnlineHostLobby::class.java)!!
+
+            val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
+
+
+            Game.getInstance().setSharedPreferences(sp)
+
+            OnlineGame.getInstance().setLobby(ohl)
+            OnlineGame.getInstance().setMyColor(PLAYER.BLUE)
+
+            val intent = Intent(requireContext(), GameActivity::class.java)
+            intent.putExtra("isOnline", true)
+            startActivity(intent)
+        } catch (e: Exception){
+            Log.e("Bugfix", "HostGame joined: ${e.message}")
+        }
+        /*
             val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
             val onlineGameTransferObj = snapshot.child("ogto").getValue(OnlineGameTransferObj::class.java)!!
 
@@ -106,21 +143,24 @@ class HostGameFragment: Fragment() {
             editor.apply()
 
             if(onlineGameTransferObj.blueName == onlineGameTransferObj.lastPlayer)
-                Game.getInstance().setFirstPlayer(PLAYER.RED)
+                OnlineGame.getInstance().setFirstPlayer(PLAYER.RED)
             else
-                Game.getInstance().setFirstPlayer(PLAYER.BLUE)
+                OnlineGame.getInstance().setFirstPlayer(PLAYER.BLUE)
 
-            Game.getInstance().setOnlinePlayerName(onlineGameTransferObj.blueName)
+            OnlineGame.getInstance().setOnlinePlayerName(onlineGameTransferObj.blueName)
 
-            Game.getInstance().setOnlineGameTransferObj(onlineGameTransferObj)
-            Game.getInstance().setOnlineHostLobby(onlineHostLobby!!)
-            Game.getInstance().setSharedPreferences(sp)
-            Game.getInstance().isOnline(true)
-            Game.getInstance().startNewGame()
+            OnlineGame.getInstance().setOnlineGameTransferObj(onlineGameTransferObj)
+            OnlineGame.getInstance().setOnlineHostLobby(onlineHostLobby!!)
+            OnlineGame.getInstance().setSharedPreferences(sp)
+            OnlineGame.getInstance().isOnline(true)
+            OnlineGame.getInstance().startNewGame()
         } catch (e: Exception) {
             Log.e("Bugfix", "${e.message}")
         }
         val intent = Intent(requireContext(), GameActivity::class.java)
+        intent.putExtra("isOnline", true)
         startActivity(intent)
+         */
+
     }
 }

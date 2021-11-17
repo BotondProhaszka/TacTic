@@ -2,13 +2,12 @@ package hu.bme.aut.tactic.model
 
 import java.util.*
 
-data class OnlineHostLobby(val lobbyName: String, val hostPlayerName: String ,val width: Int, val height: Int) {
-    var id = Random().nextInt(1000)
+class OnlineHostLobby(val lobbyName: String, val hostPlayerName: String, val width: Int, val height: Int, val firstPlayer: PLAYER) {
+    var joinPlayerName: String = ""
+
+    constructor() : this("", "", 0, 0, PLAYER.BLUE){}
 
 
-    constructor(id: Int, lobbyName: String, hostPlayerName: String, width: Int, height: Int) : this(lobbyName, hostPlayerName, width, height){
-        this.id = id
-    }
 
-    fun getConnString(): String = "${lobbyName}_$id"
+    fun getConnString(): String = "${lobbyName}_${hostPlayerName}_${width}_${height}"
 }

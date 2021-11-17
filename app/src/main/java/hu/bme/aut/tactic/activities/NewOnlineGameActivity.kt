@@ -8,6 +8,9 @@ import com.google.firebase.database.FirebaseDatabase
 import hu.bme.aut.tactic.R
 import hu.bme.aut.tactic.adapters.OnlineLobbyAdapter
 import hu.bme.aut.tactic.databinding.ActivityNewOnlineGameBinding
+import hu.bme.aut.tactic.databinding.MapViewBinding
+import hu.bme.aut.tactic.model.Game
+import hu.bme.aut.tactic.model.MapViewHelper
 import kotlin.concurrent.thread
 
 class NewOnlineGameActivity : AppCompatActivity() {
@@ -20,7 +23,7 @@ class NewOnlineGameActivity : AppCompatActivity() {
         binding = ActivityNewOnlineGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
-
+        MapViewHelper.game = Game.getInstance()
     }
 
     override fun onResume() {

@@ -140,7 +140,6 @@ class SettingsDialog: DialogFragment(), AdapterView.OnItemSelectedListener{
 
     private fun initPlayerName(){
         val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
-        val editor: SharedPreferences.Editor = sp.edit()
 
         val rndNumb = Random.nextInt(1000000)
         binding.etPlayerName.setText(sp.getString("PLAYER_NAME", "guestPlayer$rndNumb"))

@@ -23,10 +23,9 @@ import hu.bme.aut.tactic.model.Game
 import java.lang.Exception
 import kotlin.concurrent.thread
 
-class RestartGameDialog(context: Context, score: Score): Dialog(context) {
+class RestartGameDialog(context: Context, private var score: Score): Dialog(context) {
 
     private lateinit var binding: RestartGameDialogBinding
-    private var score = score
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,23 +41,17 @@ class RestartGameDialog(context: Context, score: Score): Dialog(context) {
 
         binding.btnMenu.setOnClickListener {
 
-            Log.d("Bugfix", "btnMenu clicked")
             val intent = Intent(this.context, MenuActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(context, intent, null)
-            thread {
-                val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
-                val editor: SharedPreferences.Editor = sp.edit()
-                editor.putBoolean("SHOULD_SHOW_NEW_GAME_DIALOG", true)
-                editor.apply()
-            }
+
         }
     }
 
     override fun onStart() {
         super.onStart()
-        this?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        val dialog: Dialog? = this
+        this.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val dialog: Dialog = this
         if (dialog != null) {
             val width = ViewGroup.LayoutParams.MATCH_PARENT
             val height = ViewGroup.LayoutParams.MATCH_PARENT
