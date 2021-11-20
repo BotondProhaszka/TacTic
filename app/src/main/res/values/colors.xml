@@ -1,26 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+
+    <color name="main_background">#0C0032</color>
+    <color name="sec_backgrond">#3500D3</color>
+    <color name="text_color">#FFFFFFFF</color>
+    <color name="button_normal">#E600FF</color>
+
+    <color name="main_color">#BC6D4F</color>
+    <color name="primary_variant">#E29930</color>
+    <color name="on_primary">#32384D</color>
+    <color name="player_red">#FF0000</color>
+    <color name="player_blue">#0000FF</color>
+
+
+<!--
+
     <color name="main_blue">#3500D3</color>
     <color name="sec_blue">#240090</color>
     <color name="third_blue">#190061</color>
     <color name="grey">#282828</color>
     <color name="dark_purple">#0C0032</color>
 
-    <!--sunkNSky-->
+    sunkNSky
     <color name="cerulean_blue">#217CA3</color>
     <color name="mustard">#E29930</color>
     <color name="asphalt">#32384D</color>
     <color name="shadow">#211F30</color>
 
 
-    <!--VintageCharm-->
+    VintageCharm
     <color name="honey_suckle">#FCC875</color>
     <color name="warm_gray">#BAA896</color>
     <color name="putty">#E6CCB5</color>
     <color name="faded_roses">#E38B75</color>
 
 
-    <!--Vineyard_neturals-->
+    Vineyard_neturals
     <color name="dark_red">#1E0000</color>
     <color name="wine">#500805</color>
     <color name="clay">#9D331F</color>
@@ -34,4 +50,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="yellow">#FFD600</color>
     <color name="pink">#E600FF</color>
+
+    -->
 </resources>

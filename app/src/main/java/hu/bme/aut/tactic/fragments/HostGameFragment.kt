@@ -123,8 +123,8 @@ class HostGameFragment: Fragment() {
 
             Game.getInstance().setSharedPreferences(sp)
 
-            OnlineGame.getInstance().setLobby(ohl)
-            OnlineGame.getInstance().setMyColor(PLAYER.BLUE)
+            OnlineGame.setLobby(ohl)
+            OnlineGame.setMyColor(PLAYER.BLUE)
 
             val intent = Intent(requireContext(), GameActivity::class.java)
             intent.putExtra("isOnline", true)
@@ -132,35 +132,5 @@ class HostGameFragment: Fragment() {
         } catch (e: Exception){
             Log.e("Bugfix", "HostGame joined: ${e.message}")
         }
-        /*
-            val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
-            val onlineGameTransferObj = snapshot.child("ogto").getValue(OnlineGameTransferObj::class.java)!!
-
-            database.getReference("gameRooms").child("${onlineHostLobby?.getConnString()}").child("ogto").child("blueName").setValue(onlineGameTransferObj.blueName)
-
-            val editor: SharedPreferences.Editor = sp.edit()
-            editor.putBoolean("SHOULD_SHOW_NEW_GAME_DIALOG", false)
-            editor.apply()
-
-            if(onlineGameTransferObj.blueName == onlineGameTransferObj.lastPlayer)
-                OnlineGame.getInstance().setFirstPlayer(PLAYER.RED)
-            else
-                OnlineGame.getInstance().setFirstPlayer(PLAYER.BLUE)
-
-            OnlineGame.getInstance().setOnlinePlayerName(onlineGameTransferObj.blueName)
-
-            OnlineGame.getInstance().setOnlineGameTransferObj(onlineGameTransferObj)
-            OnlineGame.getInstance().setOnlineHostLobby(onlineHostLobby!!)
-            OnlineGame.getInstance().setSharedPreferences(sp)
-            OnlineGame.getInstance().isOnline(true)
-            OnlineGame.getInstance().startNewGame()
-        } catch (e: Exception) {
-            Log.e("Bugfix", "${e.message}")
-        }
-        val intent = Intent(requireContext(), GameActivity::class.java)
-        intent.putExtra("isOnline", true)
-        startActivity(intent)
-         */
-
     }
 }

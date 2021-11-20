@@ -13,8 +13,6 @@ import hu.bme.aut.tactic.fragments.MapView
 
 object OnlineGame : GameInterface {
 
-    private val instance = OnlineGame
-
     private lateinit var lobby: OnlineHostLobby
     private val database = FirebaseDatabase.getInstance("https://tactic-add7c-default-rtdb.europe-west1.firebasedatabase.app/")
 
@@ -25,11 +23,9 @@ object OnlineGame : GameInterface {
     private var clickedFromOnline = false
     private var clickedCounter = 0
 
+    private var repeat = false
 
 
-
-
-    fun getInstance() : OnlineGame = instance
 
 
     override fun startNewGame(firstPlayer: PLAYER?) {
@@ -48,20 +44,21 @@ object OnlineGame : GameInterface {
         database.getReference("gameRooms").child(lobby.getConnString())
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    try {
-                        val onlineGameTransferObj = snapshot.getValue(OnlineGameTransferObj::class.java)
-                        if(onlineGameTransferObj == null){
-                            return
-                        }
-                        else {
-                            if(onlineGameTransferObj.x == 0 || onlineGameTransferObj.y == 0)
+                    synchronized (this) {
+                        try {
+                            val onlineGameTransferObj = snapshot.getValue(OnlineGameTransferObj::class.java) ?: return
+                            if(snapshot.value == null)
+                                Game.getInstance().gameOver(null)
+                            if (onlineGameTransferObj.x == 0 || onlineGameTransferObj.y == 0)
                                 return
                             clickedCounter = onlineGameTransferObj.id
                             clickedFromOnline = true
-                            clickedOn(onlineGameTransferObj.x, onlineGameTransferObj.y)
+                            if(clickedCounter - 1 == Game.getInstance().getClickCounter())
+                                clickedOn(onlineGameTransferObj.x, onlineGameTransferObj.y)
+                            repeat = Game.getActualPlayer() == myColor
+                        } catch (e: Exception) {
+                            Log.e("Bugfix", "OnlineGame listener: ${e.message}")
                         }
-                    } catch (e: Exception){
-                        Log.e("Bugfix", "OnlineGame listener: ${e.message}")
                     }
                 }
 
@@ -95,7 +92,7 @@ object OnlineGame : GameInterface {
         }
     }
 
-    fun uploadStep(x: Int, y: Int){
+    private fun uploadStep(x: Int, y: Int){
         val ogto =
             OnlineGameTransferObj(
                 id = Game.getInstance().getClickCounter(),
@@ -127,8 +124,11 @@ object OnlineGame : GameInterface {
 
     override fun getRedPlayersName(): String = lobby.joinPlayerName
 
-    override fun getScore(): Score = Game.getInstance().getScore()
-
+    override fun getScore(): Score {
+        val score = Game.getInstance().getScore()
+        score.offlineGame = false
+        return score
+    }
     override fun getActualPlayer(): PLAYER = Game.getInstance().getActualPlayer()
 
     override fun getMap(): ArrayList<ArrayList<Field>> = Game.getInstance().getMap()
@@ -146,7 +146,7 @@ object OnlineGame : GameInterface {
         database.getReference("gameRooms").child(lobby.getConnString()).removeValue()
     }
 
-    override fun getFirstPlayer(): PLAYER? {
+    override fun getFirstPlayer(): PLAYER {
         return lobby.firstPlayer
     }
 }

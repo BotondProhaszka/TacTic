@@ -3,9 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    android:layout_marginStart="5dp"
-    android:layout_marginBottom="5dp"
+    android:layout_marginVertical="10dp"
+    android:layout_marginHorizontal="30dp"
     android:theme="@style/Theme.TacTic">
 
     <TextView
@@ -14,7 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="7dp"
         android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@id/tvPlayer1Score"
+        app:layout_constraintEnd_toStartOf="@+id/ibDeleteRow"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -22,9 +22,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="7dp"
-        android:layout_marginEnd="15dp"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ibDeleteRow"
+        app:layout_constraintStart_toEndOf="@+id/tvPlayer1Name"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -33,18 +33,19 @@
         android:layout_height="wrap_content"
         android:layout_margin="7dp"
         android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@id/tvPlayer2Score"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ibDeleteRow"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/tvPlayer2Score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="7dp"
-        android:layout_marginEnd="15dp"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/ibDeleteRow"
+        app:layout_constraintStart_toEndOf="@+id/tvPlayer2Name" />
 
     <ImageButton
         android:id="@+id/ibDeleteRow"
@@ -58,5 +59,27 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="7dp"
+        android:text="@string/blue"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvPlayer1Name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvPlayer1Name" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="7dp"
+        android:text="@string/red"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvPlayer2Name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvPlayer2Name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

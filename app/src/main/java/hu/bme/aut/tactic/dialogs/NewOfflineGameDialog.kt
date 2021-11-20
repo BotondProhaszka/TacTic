@@ -14,8 +14,6 @@ import hu.bme.aut.tactic.activities.GameActivity
 import hu.bme.aut.tactic.activities.MenuActivity
 import hu.bme.aut.tactic.databinding.NewOfflineGameDialogBinding
 import hu.bme.aut.tactic.model.Game
-import hu.bme.aut.tactic.model.MapViewHelper
-import hu.bme.aut.tactic.model.OnlineGame
 
 class NewOfflineGameDialog(context: Context) : Dialog(context){
     private lateinit var binding: NewOfflineGameDialogBinding
@@ -23,7 +21,6 @@ class NewOfflineGameDialog(context: Context) : Dialog(context){
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = NewOfflineGameDialogBinding.inflate(layoutInflater)
 
-        MapViewHelper.game = OnlineGame.getInstance()
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE)
         this.setContentView(binding.root)

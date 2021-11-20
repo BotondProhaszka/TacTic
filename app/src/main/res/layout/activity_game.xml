@@ -8,6 +8,8 @@
     tools:context=".activities.GameActivity">
 
 
+
+
         <LinearLayout
             android:id="@+id/view"
             android:layout_width="0dp"
@@ -59,42 +61,44 @@
             app:layout_constraintStart_toStartOf="@+id/guideline3"
             app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="9"
-            app:flow_verticalAlign="center"
-            app:layout_constraintBottom_toTopOf="@+id/guideline1"
-            app:layout_constraintEnd_toStartOf="@+id/guideline4"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/tvBlueName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4"
-                    android:textColor="@color/player_blue"
-                    android:textAlignment="center"
-                    android:text="" />
-
-                <TextView
-                    android:id="@+id/tvVs"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textAlignment="center"
-                    android:text="@string/vs" />
+                    android:orientation="horizontal"
+                    android:weightSum="9"
+                    app:flow_verticalAlign="center"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline1"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline4"
+                    app:layout_constraintStart_toStartOf="@+id/guideline3"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/tvRedName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4"
-                    android:textColor="@color/player_red"
-                    android:textAlignment="center"
-                    android:text="" />
-        </LinearLayout>
+                        <TextView
+                            android:id="@+id/tvBlueName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:textColor="@color/player_blue"
+                            android:textAlignment="center"
+                            android:text="" />
+
+                        <TextView
+                            android:id="@+id/tvVs"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textAlignment="center"
+                            android:text="@string/vs" />
+
+                        <TextView
+                            android:id="@+id/tvRedName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:textColor="@color/player_red"
+                            android:textAlignment="center"
+                            android:text="" />
+                </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,7 +24,7 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
     private var cellHeight = 0F
     private var correct = 9F
 
-    private var game: GameInterface = OnlineGame.getInstance()
+    private var game: GameInterface = MapViewHelper.game
 
 
     private lateinit var canvas: Canvas
@@ -144,7 +144,7 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
         var y = field.y
 
         var sign = ""
-        when (field.getSign()) {
+        when (field.sign) {
             SIGN.ONE -> {
                 sign = "1"
             }

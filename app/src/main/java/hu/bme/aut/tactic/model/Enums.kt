@@ -8,7 +8,7 @@ enum class PLAYER {
 }
 
 enum class SIGN (val value: Int) {
-    BASE(0),
+    BASE(2),
     ONE(1),
     TWO(2),
     THREE(3),

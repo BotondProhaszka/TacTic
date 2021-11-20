@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="main_background">#E6CCB5</color>
+    <color name="sec_backgrond">#BAA896</color>
+    <color name="text_color">#500805</color>
+    <color name="button_normal">#9D331F</color>
+
+    <color name="main_color">#217CA3</color>
+    <color name="primary_variant">#E29930</color>
+    <color name="on_primary">#32384D</color>
+
+
+    <color name="player_red">#FF0000</color>
+    <color name="player_blue">#0000FF</color>
+</resources>

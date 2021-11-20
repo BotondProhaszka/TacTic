@@ -23,7 +23,6 @@ class NewOnlineGameActivity : AppCompatActivity() {
         binding = ActivityNewOnlineGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
-        MapViewHelper.game = Game.getInstance()
     }
 
     override fun onResume() {

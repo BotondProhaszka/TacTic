@@ -106,10 +106,10 @@ class JoinGameFragment: Fragment(), JoinGameAdapter.JoinGameClickListener{
         editor.putInt("MAP_HEIGHT_VAL", onlineHostLobby.height)
         editor.apply()
         Game.getInstance().setSharedPreferences(sp)
-        OnlineGame.getInstance().setLobby(onlineHostLobby)
+        OnlineGame.setLobby(onlineHostLobby)
         database.getReference("lobbies").child(onlineHostLobby.lobbyName).setValue(onlineHostLobby)
-        OnlineGame.getInstance().setMyColor(PLAYER.RED)
-        OnlineGame.getInstance().setMapSize(onlineHostLobby.width, onlineHostLobby.height)
+        OnlineGame.setMyColor(PLAYER.RED)
+        OnlineGame.setMapSize(onlineHostLobby.width, onlineHostLobby.height)
         Log.d("Bugfix", "Clicked2: ${onlineHostLobby.getConnString()}")
 
         val onlineGameTransferObj = OnlineGameTransferObj(0, 0, 0)

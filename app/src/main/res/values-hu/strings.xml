@@ -25,4 +25,11 @@
     <string name="cancel">Mégse</string>
     <string name="join">Csatlakozás</string>
     <string name="host">Indítás</string>
+    <string name="vs">VS</string>
+    <string name="host_match">Host</string>
+    <string name="lobby_s_name">Szoba neve</string>
+    <string name="scoreboard">Dicsőségtábla</string>
+    <string name="reload">Reload</string>
+    <string name="online_rooms">Online rooms</string>
+    <string name="playername">PlayerName</string>
 </resources>

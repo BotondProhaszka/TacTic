@@ -49,10 +49,11 @@
 
             <LinearLayout
                 android:id="@+id/llWinner"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:theme="@style/Theme.TacTic"
+                android:weightSum="5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvWinner">
@@ -60,41 +61,46 @@
 
                 <TextView
                     android:id="@+id/tvWinnerName"
-                    android:layout_width="wrap_content"
+                    android:textAlignment="center"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Winner"
+                    android:layout_weight="4"
                     android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/tvWinnerScore"
-                    android:layout_width="wrap_content"
+                    android:textAlignment="center"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="2"
+                    android:layout_weight="1"
                     android:textSize="20sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/llLooser"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:theme="@style/Theme.TacTic"
+                android:weightSum="5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/llWinner">
 
                 <TextView
                     android:id="@+id/tvLooserName"
-                    android:layout_width="wrap_content"
+                    android:textAlignment="center"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Looser"
+                    android:layout_weight="4"
                     android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/tvLooserScore"
-                    android:layout_width="wrap_content"
+                    android:textAlignment="center"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="1"
+                    android:layout_weight="1"
                     android:textSize="20sp" />
             </LinearLayout>
 

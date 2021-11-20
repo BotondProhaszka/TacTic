@@ -27,10 +27,9 @@ object Game: GameInterface {
     private var mapHeight = 0
     private var round: ROUND = ROUND.FIRST_BASE
     private var actual_player: PLAYER = PLAYER.BLUE
-    private var bluePlayer: PlayerUser? = null
-    private var redPlayer: PlayerUser? = null
-
-    private var score = Score(null, "Player1Name", 1, "Player2Name", 2, true)
+    private lateinit var bluePlayer: PlayerUser
+    private lateinit var redPlayer: PlayerUser
+    //private var score = Score(null, "Player1Name", 1, "Player2Name", 2, true)
 
     fun getInstance(): Game = instance
 
@@ -39,10 +38,15 @@ object Game: GameInterface {
         redPlayer = PlayerUser(red_name, PLAYER.RED)
     }
 
-    override fun getBluePlayersName() : String = bluePlayer?.name.toString()
-    override fun getRedPlayersName() : String = redPlayer?.name.toString()
+    override fun getBluePlayersName() : String = bluePlayer.name.toString()
+    override fun getRedPlayersName() : String = redPlayer.name.toString()
 
-
+    fun getActualPlayerUser() : PlayerUser {
+        return if(actual_player == PLAYER.BLUE)
+            bluePlayer
+        else
+            redPlayer
+    }
 
     override fun startNewGame(firstPlayer: PLAYER?) {
 
@@ -59,11 +63,16 @@ object Game: GameInterface {
         setMap(x, y)
     }
 
+    override fun getScore(): Score {
+        return Score(null, bluePlayer.name, bluePlayer.score, redPlayer.name, redPlayer.score, true, winner = null)
+    }
+
     fun restartGame() {
         round = ROUND.FIRST_BASE
         setMap(mapWidth, mapHeight)
         setRandomFirstPlayer()
-
+        bluePlayer.score = 0
+        redPlayer.score = 0
     }
 
     private fun setMap(width: Int, height: Int) {
@@ -116,17 +125,12 @@ object Game: GameInterface {
         return null
     }
 
-    override fun getScore(): Score {
-        return score
-    }
-
-
     fun setSharedPreferences(sp: SharedPreferences) {
         this.sp = sp
     }
 
-    override fun setMapView(view: MapView){
-        this.mapView = view
+    override fun setMapView(mapView: MapView){
+        this.mapView = mapView
     }
 
     fun getClickCounter() : Int = clickCounter
@@ -137,7 +141,7 @@ object Game: GameInterface {
         mapHeight = y
     }
 
-    private fun playerStepped(x: Int, y: Int) {
+    private fun playerStepped() {
             actual_player = getOtherPlayer(actual_player)
             removeClickedFrom()
             mapView.invalidate()
@@ -150,19 +154,23 @@ object Game: GameInterface {
         }
     }
 
-    fun gameOverDraw(){
-        gameOver(null)
-    }
-
     fun gameOver(winner: PLAYER?) {
+        val score = Score(
+            id = null,
+            player1Name = bluePlayer.name,
+            player1Score = bluePlayer.score,
+            player2Name = redPlayer.name,
+            player2Score = redPlayer.score,
+            offlineGame = true,
+            winner = winner )
+        Log.i("Bugfix", "$winner")
         restartGame()
         gameActivity.gameOver(score)
     }
 
     override fun clickedOn(x: Int, y: Int) {
-        Log.d("Bugfix", "Game.clickedOn()")
         if (round != ROUND.FIRST_BASE && round != ROUND.SEC_BASE)
-            if (!hasCorrectNeighbour(x, y)) {
+            if (!hasCorrectNeighbour(x, y) && actual_player != map[x][y].getPlayer()) {
                 if (clickedFrom != null)
                     removeClickedFrom()
                 return
@@ -171,21 +179,21 @@ object Game: GameInterface {
         when (round) {
             ROUND.FIRST_BASE -> {
                 map[x][y] = Field(x, y, actual_player, SIGN.BASE, false)
-                playerStepped(x, y)
+                playerStepped()
                 round = ROUND.SEC_BASE
                 return
             }
             ROUND.SEC_BASE -> {
                 map[x][y] = Field(x, y, actual_player, SIGN.BASE, false)
-                playerStepped(x, y)
+                playerStepped()
                 round = ROUND.GAME
                 return
             }
             ROUND.GAME -> {
-
                 if (map[x][y].getPlayer() == null) {
                     map[x][y] = Field(x, y, actual_player, SIGN.ONE, false)
-                    playerStepped(x, y)
+                    conquestAddScore()
+                    playerStepped()
                     return
                 } else if (clickedFrom == null) {
                     if (map[x][y].getPlayer() == actual_player) {
@@ -194,8 +202,10 @@ object Game: GameInterface {
                         return
                     }
                 } else if (clickedFrom?.samePlace(map[x][y]) == true) {
-                    if (map[x][y].increaseSignValue())
-                        playerStepped(x, y)
+                    if (map[x][y].increaseSignValue()) {
+                        increaseAddScore()
+                        playerStepped()
+                    }
                     return
                 } else if (clickedFrom?.getPlayer() == map[x][y].getPlayer()) {
                     clickedFrom?.setHighlighted(false)
@@ -205,15 +215,16 @@ object Game: GameInterface {
                 } else {
                     if (map[x][y].attackFrom(Field(clickedFrom))) {
                         try {
-                            clickedFrom!!.setSign(map[x][y].getSign()?.let {
-                                clickedFrom!!.getSign()?.getMinus(
-                                    it
-                                )
-                            }!!)
+                            Log.d("Bugfix", "ASd ${map[x][y].sign}")
+                            val mapS = map[x][y].sign
+                            val s = mapS?.let { clickedFrom!!.sign?.getMinus(it) }
+                            if (s != null) {
+                                clickedFrom?.setSign(s)
+                            }
+
                         } catch (e: Exception){
-                            Log.e("Bugfix", "Game.attack error: ${e.message}")
                         }
-                        playerStepped(x, y)
+                        playerStepped()
                         return
                     }
                 }
@@ -240,6 +251,18 @@ object Game: GameInterface {
     private fun removeClickedFrom() {
         clickedFrom?.setHighlighted(false)
         clickedFrom = null
+    }
+
+    private fun conquestAddScore(){
+        getActualPlayerUser().score += SCORE_CONQUEST
+    }
+
+    private fun increaseAddScore(){
+        getActualPlayerUser().score += SCORE_INCREASE
+    }
+
+    fun attackAddScore(score: Int){
+        getActualPlayerUser().score += score
     }
 
 }

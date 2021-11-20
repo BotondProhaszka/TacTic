@@ -6,13 +6,13 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
- import hu.bme.aut.tactic.activities.GameActivity
  import hu.bme.aut.tactic.activities.NewOnlineGameActivity
- import hu.bme.aut.tactic.activities.ScoreActivity
  import hu.bme.aut.tactic.databinding.MainMenuFragmentBinding
  import hu.bme.aut.tactic.dialogs.NewOfflineGameDialog
  import hu.bme.aut.tactic.dialogs.SettingsDialog
  import hu.bme.aut.tactic.model.Game
+ import hu.bme.aut.tactic.model.MapViewHelper
+ import hu.bme.aut.tactic.model.OnlineGame
 
 class MainMenuFragment : Fragment() {
     private lateinit var binding: MainMenuFragmentBinding
@@ -21,20 +21,16 @@ class MainMenuFragment : Fragment() {
         binding = MainMenuFragmentBinding.inflate(inflater, container, false)
 
         binding.btnOffline.setOnClickListener {
+            MapViewHelper.game = Game.getInstance()
             NewOfflineGameDialog(this.requireContext()).show()
         }
 
         binding.btnOnline.setOnClickListener{
+            MapViewHelper.game = OnlineGame
             val intent = Intent(this.context, NewOnlineGameActivity::class.java)
             startActivity(intent)
         }
 
-        /*
-        binding.btnScores.setOnClickListener{
-            val intent = Intent(this.context, ScoreActivity::class.java)
-            startActivity(intent)
-        }
-        */
 
         binding.btnSettings.setOnClickListener{
             SettingsDialog().show(this.parentFragmentManager, "SETTINGS")

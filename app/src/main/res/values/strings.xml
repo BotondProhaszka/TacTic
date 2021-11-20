@@ -32,5 +32,7 @@
     <string name="reload">Reload</string>
     <string name="online_rooms">Online rooms</string>
     <string name="playername">PlayerName</string>
+    <string name="blue">Blue:</string>
+    <string name="red">Red:</string>
 
 </resources>

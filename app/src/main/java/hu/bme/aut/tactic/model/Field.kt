@@ -1,11 +1,12 @@
 package hu.bme.aut.tactic.model
 
+import android.util.Log
 import kotlin.math.abs
 
 
 class Field(var x: Int, var y: Int) {
     private var player: PLAYER? = null
-    private var sign: SIGN? = null
+    var sign: SIGN? = null
     private var highlighted: Boolean = false
 
     constructor(x: Int, y: Int, player: PLAYER?, sign: SIGN?, highlighted: Boolean) : this(x, y) {
@@ -14,10 +15,10 @@ class Field(var x: Int, var y: Int) {
         this.highlighted = highlighted
     }
 
-    constructor(field: Field?):this(field!!.x, field.y, field.getPlayer(), field.getSign(), field.isHighlighted())
+    constructor(field: Field?):this(field!!.x, field.y, field.getPlayer(), field.sign, field.isHighlighted())
 
     fun getPlayer() : PLAYER? { return player }
-    fun getSign() : SIGN? { return sign }
+    //fun getSign() : SIGN? { return sign }
     fun isHighlighted() : Boolean { return highlighted }
 
     @JvmName("setPlayer1")
@@ -57,19 +58,20 @@ class Field(var x: Int, var y: Int) {
             when {
                 this.sign == SIGN.BASE -> {
                     return if (from.sign!!.value >= 2) {
+                        Game.attackAddScore(50)
+                        Log.d("Bugfix", "Winner: ${from.getPlayer()}")
                         Game.getInstance().gameOver(from.getPlayer())
-                        this.setPlayer(from.getPlayer()!!)
                         true
                     } else
                         false
                 }
                 from.sign!!.minus(this.sign!!) >= 1 -> {
+                    Game.attackAddScore(from.sign!!.minus(this.sign!!))
                     this.setPlayer(from.getPlayer()!!)
                     this.setSign(from.sign!!.getMinus(this.sign!!))
                     return true
                 }
                 from.sign!!.minus(this.sign!!)== 0 -> {
-
                     this.setSign(SIGN.ONE)
                     Game.getInstance().getMap()[from.x][from.y].setSign(SIGN.ONE)
                     return true
@@ -80,7 +82,7 @@ class Field(var x: Int, var y: Int) {
     }
 
 
-    fun isNeighbour(field: Field) : Boolean{
+    private fun isNeighbour(field: Field) : Boolean{
         if(this.x == field.x)
             if(abs(this.y - field.y) <= 1)
                 return true

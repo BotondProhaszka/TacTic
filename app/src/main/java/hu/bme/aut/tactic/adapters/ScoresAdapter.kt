@@ -1,11 +1,15 @@
 package hu.bme.aut.tactic.adapters
 
+import android.annotation.SuppressLint
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import hu.bme.aut.tactic.R
 import hu.bme.aut.tactic.data.Score
 import hu.bme.aut.tactic.databinding.ScoreRowBinding
+import hu.bme.aut.tactic.model.PLAYER
 
 class ScoresAdapter (private val listener: ScoreClickListener) :
     RecyclerView.Adapter<ScoresAdapter.ScoreViewHolder>(){
@@ -23,6 +27,18 @@ class ScoresAdapter (private val listener: ScoreClickListener) :
         holder.binding.tvPlayer1Score.text = score.player1Score.toString()
         holder.binding.tvPlayer2Name.text = score.player2Name
         holder.binding.tvPlayer2Score.text = score.player2Score.toString()
+
+        if(score.winner != null) {
+            val color = when (score.winner) {
+                PLAYER.BLUE -> Color.BLUE
+                else -> Color.RED
+            }
+            holder.binding.tvPlayer1Name.setTextColor(color)
+            holder.binding.tvPlayer1Score.setTextColor(color)
+            holder.binding.tvPlayer2Name.setTextColor(color)
+            holder.binding.tvPlayer2Score.setTextColor(color)
+        }
+
 
         holder.binding.ibDeleteRow.setOnClickListener{
             remove(score)
