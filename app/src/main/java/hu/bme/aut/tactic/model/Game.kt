@@ -155,6 +155,7 @@ object Game: GameInterface {
     }
 
     fun gameOver(winner: PLAYER?) {
+        OnlineGame.gameOver()
         val score = Score(
             id = null,
             player1Name = bluePlayer.name,

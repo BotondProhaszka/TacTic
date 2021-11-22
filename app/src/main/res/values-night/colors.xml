@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="main_background">#E6CCB5</color>
-    <color name="sec_backgrond">#BAA896</color>
-    <color name="text_color">#500805</color>
-    <color name="button_normal">#9D331F</color>
+    <color name="main_background">#0C0032</color>
+    <color name="sec_background">#3500D3</color>
+    <color name="text_color">#FFFFFFFF</color>
+    <color name="button_normal">#E600FF</color>
 
     <color name="main_color">#217CA3</color>
     <color name="primary_variant">#E29930</color>

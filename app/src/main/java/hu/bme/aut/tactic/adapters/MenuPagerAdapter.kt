@@ -8,6 +8,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import hu.bme.aut.tactic.data.Score
 import hu.bme.aut.tactic.data.ScoresDatabase
 import hu.bme.aut.tactic.fragments.MainMenuFragment
+import hu.bme.aut.tactic.fragments.RulesFragment
 import hu.bme.aut.tactic.fragments.ScoreMenuFragment
 
 class MenuPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
@@ -15,13 +16,14 @@ class MenuPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapte
     private val scoreMenuFragment = ScoreMenuFragment()
 
     companion object{
-        const val NUM_PAGES = 2
+        const val NUM_PAGES = 3
     }
 
     override fun createFragment(position: Int): Fragment {
         return when(position){
-            0 -> MainMenuFragment()
-            1 -> scoreMenuFragment
+            0 -> RulesFragment()
+            1 -> MainMenuFragment()
+            2 -> scoreMenuFragment
             else -> MainMenuFragment()
         }
     }

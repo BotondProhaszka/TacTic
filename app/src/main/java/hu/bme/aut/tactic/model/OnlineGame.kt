@@ -92,6 +92,11 @@ object OnlineGame : GameInterface {
         }
     }
 
+
+    fun gameOver(){
+        closeGameRoom()
+    }
+
     private fun uploadStep(x: Int, y: Int){
         val ogto =
             OnlineGameTransferObj(

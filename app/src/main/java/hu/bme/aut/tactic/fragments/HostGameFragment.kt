@@ -71,10 +71,12 @@ class HostGameFragment: Fragment() {
     }
 
     private fun cancel() {
-        database.getReference("lobbies").child(onlineHostLobby.lobbyName).removeValue()
-        binding.btnHost.isEnabled = true
-        binding.btnCancel.isEnabled = false
-        binding.etHostGameName.isEnabled = true
+       if(this::onlineHostLobby.isInitialized) {
+           database.getReference("lobbies").child(onlineHostLobby.lobbyName).removeValue()
+           binding.btnHost.isEnabled = true
+           binding.btnCancel.isEnabled = false
+           binding.etHostGameName.isEnabled = true
+       }
     }
 
     private fun initOnlineHostLobby() : OnlineHostLobby{
@@ -119,7 +121,6 @@ class HostGameFragment: Fragment() {
             val ohl = snapshot.getValue(OnlineHostLobby::class.java)!!
 
             val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
-
 
             Game.getInstance().setSharedPreferences(sp)
 

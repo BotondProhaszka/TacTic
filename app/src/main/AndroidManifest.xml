@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="hu.bme.aut.tactic">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -14,8 +15,6 @@
         <activity
             android:name=".activities.NewOnlineGameActivity"
             android:exported="false" />
-        <activity
-            android:name=".activities.ScoreActivity"
             android:exported="false" />
         <activity
             android:name=".activities.GameActivity"
@@ -29,7 +28,6 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

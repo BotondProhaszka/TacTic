@@ -140,8 +140,8 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
 
     @SuppressLint("ResourceAsColor")
     private fun draw(field: Field) {
-        var x = field.x
-        var y = field.y
+        val x = field.x
+        val y = field.y
 
         var sign = ""
         when (field.sign) {
@@ -163,14 +163,20 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
             else -> return
 
         }
-        paint.textSize = 100F
 
+        Log.d("Bugfix", "~~~~~~~~~~~~~~~$cellWidth : $cellHeight")
 
+        val textSize =
+            if(cellHeight < cellWidth)
+                cellHeight
+            else
+                cellWidth
+        textSize*0.9
 
         when (field.getPlayer()) {
             PLAYER.RED -> {
                 val p2 = Paint()
-                p2.textSize = 100F
+                p2.textSize = textSize
                 if (field.isHighlighted())
                     p2.setARGB(255, 0, 255, 0)
                 else
@@ -178,15 +184,13 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
                 canvas.drawText(
                     sign,
                     (x - 0.85F) * cellWidth + correct,
-                    (y - 0.3f) * cellHeight,
+                    (y - 0.3f) * cellHeight + textSize*0.15f,
                     p2
                 )
             }
             PLAYER.BLUE -> {
-                //canvas?.drawRect((x-1) * cellWidth + correct,  (y-1) * cellHeight + correct, x*cellWidth,y*cellHeight, paint )
-                //paint.alpha = 255
                 val p2 = Paint()
-                p2.textSize = 100F
+                p2.textSize = textSize
                 if (field.isHighlighted())
                     p2.setARGB(255, 0, 255, 0)
                 else
@@ -194,7 +198,7 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
                 canvas.drawText(
                     sign,
                     (x - 0.85F) * cellWidth + correct,
-                    (y - 0.3f) * cellHeight,
+                    (y - 0.3f) * cellHeight + textSize*0.15f,
                     p2
                 )
             }

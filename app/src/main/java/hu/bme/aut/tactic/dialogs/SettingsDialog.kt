@@ -2,6 +2,7 @@ package hu.bme.aut.tactic.dialogs
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Color
@@ -24,6 +25,8 @@ import hu.bme.aut.tactic.databinding.SettingsFragmentBinding
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
+import hu.bme.aut.tactic.activities.NewOnlineGameActivity
+import hu.bme.aut.tactic.databinding.MainMenuFragmentBinding
 import kotlin.random.Random
 
 
@@ -88,7 +91,7 @@ class SettingsDialog: DialogFragment(), AdapterView.OnItemSelectedListener{
         for(i in 4..9){
             intArray.add(i)
         }
-        val aa = ArrayAdapter(this.requireContext(), android.R.layout.simple_spinner_dropdown_item, intArray)
+        val aa = ArrayAdapter(this.requireContext(), R.layout.spinner_item, intArray)
         binding.spinnerX.adapter = aa
         binding.spinnerY.adapter = aa
         binding.spinnerX.onItemSelectedListener = this
@@ -122,11 +125,16 @@ class SettingsDialog: DialogFragment(), AdapterView.OnItemSelectedListener{
                     editor.apply()
                 }
             }
+            val intent = Intent(this.context, MenuActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+
         }
     }
 
     private fun initTheme(){
         val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
+
         when (sp.getBoolean("NIGHT_MODE", true)) {
             true -> {
                 binding.ibNightmode.setImageResource(R.drawable.ic_outline_brightness_low_24)

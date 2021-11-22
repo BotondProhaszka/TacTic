@@ -4,17 +4,21 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
+import com.google.android.material.tabs.TabLayoutMediator
 import hu.bme.aut.tactic.R
 import hu.bme.aut.tactic.adapters.MenuPagerAdapter
 import hu.bme.aut.tactic.adapters.ScoresAdapter
 import hu.bme.aut.tactic.data.ScoresDatabase
 import hu.bme.aut.tactic.databinding.ActivityMenuBinding
 import kotlin.concurrent.thread
-import kotlin.system.exitProcess
 
 class MenuActivity : AppCompatActivity() {
 
@@ -25,38 +29,36 @@ class MenuActivity : AppCompatActivity() {
     private lateinit var database: ScoresDatabase
 
 
-    private var themeId : Int = 0;
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Thread.sleep(100)
 
         initTheme()
 
         sharedPreferences = getSharedPreferences("myPref", Context.MODE_PRIVATE)
         editor = sharedPreferences.edit()
 
-        changeTheme(sharedPreferences.getInt("themeId", 0))
 
         binding = ActivityMenuBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        val vpadapter = MenuPagerAdapter(this)
-        binding.vpMenu.adapter = vpadapter
+        val vpAdapter = MenuPagerAdapter(this)
+        binding.vpMenu.adapter = vpAdapter
         database = ScoresDatabase.getDatabase(this)
-        vpadapter.setDatabase(database)
-        thread {
-            val sp = PreferenceManager.getDefaultSharedPreferences(this)
-            val editor: SharedPreferences.Editor = sp.edit()
-            editor.putBoolean("SHOULD_SHOW_NEW_GAME_DIALOG", true)
-            editor.apply()
-        }
+        vpAdapter.setDatabase(database)
+
+        binding.vpMenu.setCurrentItem(1, false)
+
+        TabLayoutMediator(binding.tabLayout, binding.vpMenu) { tab, position ->
+            tab.text = when(position) {
+                0 -> getString(R.string.rules)
+                1 -> getString(R.string.home)
+                2 -> getString(R.string.scores)
+                else -> ""
+            }
+        }.attach()
+
+
+        setContentView(binding.root)
     }
 
-    private fun changeTheme(id : Int){
-        themeId = id
-        setTheme(id)
-        editor.putInt("themeId", id)
-    }
 
     private fun initTheme(){
         val sp = PreferenceManager.getDefaultSharedPreferences(this)
@@ -80,5 +82,33 @@ class MenuActivity : AppCompatActivity() {
             }
             .setNegativeButton(R.string.cancel, null)
             .show()
+    }
+
+
+    fun isNetworkAvailable(context: Context?): Boolean {
+        if (context == null) return false
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (capabilities != null) {
+                when {
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
+                        return true
+                    }
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
+                        return true
+                    }
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> {
+                        return true
+                    }
+                }
+            }
+        } else {
+            val activeNetworkInfo = connectivityManager.activeNetworkInfo
+            if (activeNetworkInfo != null && activeNetworkInfo.isConnected) {
+                return true
+            }
+        }
+        return false
     }
 }

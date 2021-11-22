@@ -2,10 +2,11 @@
 <resources>
 
 
-    <color name="main_background">#0C0032</color>
-    <color name="sec_backgrond">#3500D3</color>
-    <color name="text_color">#FFFFFFFF</color>
-    <color name="button_normal">#E600FF</color>
+    <color name="main_background">#E6CCB5</color>
+    <color name="sec_background">#BAA896</color>
+    <color name="text_color">#32384D</color>
+    <color name="button_normal">#BC6D4F</color>
+
 
     <color name="main_color">#BC6D4F</color>
     <color name="primary_variant">#E29930</color>
@@ -14,8 +15,8 @@
     <color name="player_blue">#0000FF</color>
 
 
-<!--
 
+<!--
     <color name="main_blue">#3500D3</color>
     <color name="sec_blue">#240090</color>
     <color name="third_blue">#190061</color>
@@ -41,9 +42,6 @@
     <color name="wine">#500805</color>
     <color name="clay">#9D331F</color>
     <color name="dusty_rose">#BC6D4F</color>
-
-    <color name="player_red">#FF0000</color>
-    <color name="player_blue">#0000FF</color>
 
 
     <color name="black">#FF000000</color>

@@ -34,5 +34,7 @@
     <string name="playername">PlayerName</string>
     <string name="blue">Blue:</string>
     <string name="red">Red:</string>
+    <string name="home">Home</string>
+    <string name="rules">Rules</string>
 
 </resources>

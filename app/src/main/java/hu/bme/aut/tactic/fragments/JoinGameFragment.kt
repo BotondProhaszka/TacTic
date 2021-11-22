@@ -120,43 +120,6 @@ class JoinGameFragment: Fragment(), JoinGameAdapter.JoinGameClickListener{
         val intent = Intent(requireContext(), GameActivity::class.java)
         intent.putExtra("isOnline", true)
         startActivity(intent)
-
-        /*
-        onlineGameTransferObj.blueName = onlineHostLobby.hostPlayerName
-        OnlineGame.getInstance().setOnlinePlayerName(onlineGameTransferObj.redName)
-
-        val randFirstPlayer = when ((0..1).random()) {
-            0 -> onlineGameTransferObj.blueName
-            1 -> onlineGameTransferObj.redName
-            else -> onlineGameTransferObj.blueName
-        }
-        onlineGameTransferObj.lastPlayer = randFirstPlayer
-
-
-        database.getReference("gameRooms").child(onlineHostLobby.getConnString()).child("ogto").setValue(onlineGameTransferObj)
-        database.getReference("lobbies").child(onlineHostLobby.lobbyName).removeValue()
-
-
-
-        if(onlineGameTransferObj.blueName == onlineGameTransferObj.lastPlayer)
-            Game.getInstance().setFirstPlayer(PLAYER.RED)
-        else
-            Game.getInstance().setFirstPlayer(PLAYER.BLUE)
-
-        Game.getInstance().setOnlineGameTransferObj(onlineGameTransferObj)
-        Game.getInstance().setOnlineHostLobby(onlineHostLobby)
-        Game.getInstance().isOnline(true)
-        Game.getInstance().startNewGame()
-
-        val editor: SharedPreferences.Editor = sp.edit()
-        editor.putBoolean("SHOULD_SHOW_NEW_GAME_DIALOG", false)
-        editor.apply()
-
-        val intent = Intent(requireContext(), GameActivity::class.java)
-        intent.putExtra("isOnline", true)
-        startActivity(intent)
-         */
-
     }
 
 }
