@@ -29,7 +29,6 @@ object OnlineGame : GameInterface {
 
 
     override fun startNewGame(firstPlayer: PLAYER?) {
-        Log.d("Bugfix", "Start game")
         Game.getInstance().startNewGame(firstPlayer)
         Game.getInstance().setPlayers(lobby.hostPlayerName, lobby.joinPlayerName)
         val sp = PreferenceManager.getDefaultSharedPreferences(Game.getInstance().getGameActivity().getContext())
@@ -40,7 +39,6 @@ object OnlineGame : GameInterface {
 
 
     private fun setOnlineListener() {
-        Log.d("Bugfix", "My Name: $onlinePlayerName, ConnString: ${lobby.getConnString()}")
         database.getReference("gameRooms").child(lobby.getConnString())
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -48,7 +46,7 @@ object OnlineGame : GameInterface {
                         try {
                             val onlineGameTransferObj = snapshot.getValue(OnlineGameTransferObj::class.java) ?: return
                             if(snapshot.value == null)
-                                Game.getInstance().gameOver(null)
+                                GameHelper.game.gameOver(null)
                             if (onlineGameTransferObj.x == 0 || onlineGameTransferObj.y == 0)
                                 return
                             clickedCounter = onlineGameTransferObj.id
@@ -69,18 +67,12 @@ object OnlineGame : GameInterface {
     }
 
     override fun clickedOn(x: Int, y: Int) {
-        Log.d("Bugfix", "OnlineGame.clickedOn() $myColor ${Game.getInstance().getActualPlayer()}")
         synchronized(this) {
             when {
                 //Ha nálam jön
                 myColor == Game.getInstance().getActualPlayer() -> {
-
                     Game.getInstance().clickedOn(x, y)
-
                     uploadStep(x, y)
-
-
-                    Log.d("Bugfix", "OnlineGame clickedOn")
                 }
                 //Ha online jött és még nem léptem le
                 clickedFromOnline && (clickedCounter - 1 == Game.getInstance().getClickCounter()) -> {
@@ -93,7 +85,8 @@ object OnlineGame : GameInterface {
     }
 
 
-    fun gameOver(){
+    override fun gameOver(winner: PLAYER?){
+        Game.gameOver(winner)
         closeGameRoom()
     }
 
@@ -122,7 +115,6 @@ object OnlineGame : GameInterface {
 
     fun setLobby(lobby: OnlineHostLobby){
         this.lobby = lobby
-        Log.d("Bugfix", "setLobby: ${this.lobby.getConnString()}")
     }
 
     override fun getBluePlayersName(): String = lobby.hostPlayerName

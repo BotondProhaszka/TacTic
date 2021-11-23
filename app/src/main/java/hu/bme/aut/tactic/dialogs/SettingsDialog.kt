@@ -1,32 +1,22 @@
 package hu.bme.aut.tactic.dialogs
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import hu.bme.aut.tactic.R
 import hu.bme.aut.tactic.activities.MenuActivity
 import hu.bme.aut.tactic.databinding.SettingsFragmentBinding
-
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.annotation.RequiresApi
-import hu.bme.aut.tactic.activities.NewOnlineGameActivity
-import hu.bme.aut.tactic.databinding.MainMenuFragmentBinding
 import kotlin.random.Random
 
 

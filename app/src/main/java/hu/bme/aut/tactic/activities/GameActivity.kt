@@ -15,9 +15,7 @@ import hu.bme.aut.tactic.data.Score
 import hu.bme.aut.tactic.data.ScoresDatabase
 import hu.bme.aut.tactic.databinding.ActivityGameBinding
 import hu.bme.aut.tactic.dialogs.RestartGameDialog
-import hu.bme.aut.tactic.model.Game
-import hu.bme.aut.tactic.model.MapViewHelper
-import hu.bme.aut.tactic.model.OnlineGame
+import hu.bme.aut.tactic.model.GameHelper
 import java.lang.Exception
 import kotlin.concurrent.thread
 
@@ -34,13 +32,7 @@ class GameActivity : AppCompatActivity() {
             binding = ActivityGameBinding.inflate(layoutInflater)
             setContentView(binding.root)
 
-            game = MapViewHelper.game
-
-            if (intent.extras?.get("isOnline") == false) {
-                Log.d("Bugfix", "OfflineGame started")
-            } else {
-                Log.d("Bugfix", "OnlineGame started")
-            }
+            game = GameHelper.game
 
             thread {
                 database = ScoresDatabase.getDatabase(this)

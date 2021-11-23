@@ -1,6 +1,5 @@
 package hu.bme.aut.tactic.model
 
-import android.util.Log
 import kotlin.math.abs
 
 
@@ -59,8 +58,7 @@ class Field(var x: Int, var y: Int) {
                 this.sign == SIGN.BASE -> {
                     return if (from.sign!!.value >= 2) {
                         Game.attackAddScore(50)
-                        Log.d("Bugfix", "Winner: ${from.getPlayer()}")
-                        Game.getInstance().gameOver(from.getPlayer())
+                        GameHelper.game.gameOver(from.getPlayer())
                         true
                     } else
                         false

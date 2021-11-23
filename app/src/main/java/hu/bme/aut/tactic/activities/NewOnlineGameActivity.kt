@@ -2,16 +2,11 @@ package hu.bme.aut.tactic.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.database.FirebaseDatabase
 import hu.bme.aut.tactic.R
 import hu.bme.aut.tactic.adapters.OnlineLobbyAdapter
 import hu.bme.aut.tactic.databinding.ActivityNewOnlineGameBinding
-import hu.bme.aut.tactic.databinding.MapViewBinding
-import hu.bme.aut.tactic.model.Game
-import hu.bme.aut.tactic.model.MapViewHelper
-import kotlin.concurrent.thread
 
 class NewOnlineGameActivity : AppCompatActivity() {
 

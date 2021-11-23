@@ -3,7 +3,6 @@ package hu.bme.aut.tactic.model
 
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import android.util.Log
 import hu.bme.aut.tactic.interfaces.GameInterface
 import hu.bme.aut.tactic.activities.GameActivity
 import hu.bme.aut.tactic.data.Score
@@ -154,8 +153,7 @@ object Game: GameInterface {
         }
     }
 
-    fun gameOver(winner: PLAYER?) {
-        OnlineGame.gameOver()
+    override fun gameOver(winner: PLAYER?) {
         val score = Score(
             id = null,
             player1Name = bluePlayer.name,
@@ -163,8 +161,8 @@ object Game: GameInterface {
             player2Name = redPlayer.name,
             player2Score = redPlayer.score,
             offlineGame = true,
-            winner = winner )
-        Log.i("Bugfix", "$winner")
+            winner = winner
+        )
         restartGame()
         gameActivity.gameOver(score)
     }
@@ -216,7 +214,6 @@ object Game: GameInterface {
                 } else {
                     if (map[x][y].attackFrom(Field(clickedFrom))) {
                         try {
-                            Log.d("Bugfix", "ASd ${map[x][y].sign}")
                             val mapS = map[x][y].sign
                             val s = mapS?.let { clickedFrom!!.sign?.getMinus(it) }
                             if (s != null) {

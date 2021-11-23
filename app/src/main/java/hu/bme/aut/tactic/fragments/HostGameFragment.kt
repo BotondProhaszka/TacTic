@@ -1,7 +1,6 @@
 package hu.bme.aut.tactic.fragments
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
@@ -97,7 +96,6 @@ class HostGameFragment: Fragment() {
         database.getReference("lobbies").child(onlineHostLobby.lobbyName)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    Log.d("Bugfix", "initJoinListener: $snapshot")
                     if(snapshot.value != null) {
                         if (snapshot.child("joinPlayerName").value != null) {
                             if (snapshot.child("joinPlayerName").value != "") {
@@ -116,7 +114,6 @@ class HostGameFragment: Fragment() {
     }
 
     private fun joined(snapshot: DataSnapshot){
-        Log.d("Bugfix", "Host JOINED")
         try {
             val ohl = snapshot.getValue(OnlineHostLobby::class.java)!!
 

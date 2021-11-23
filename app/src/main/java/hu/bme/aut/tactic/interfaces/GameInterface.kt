@@ -20,4 +20,5 @@ interface GameInterface {
     fun getMapHeight() : Int
     fun closeGameRoom()
     fun getFirstPlayer() : PLAYER?
+    fun gameOver(winner: PLAYER?)
 }

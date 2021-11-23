@@ -24,4 +24,6 @@ class RulesFragment : Fragment() {
         return binding.root
     }
 
+    //TODO RulesFragment
+
 }

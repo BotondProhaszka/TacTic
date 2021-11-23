@@ -1,6 +1,6 @@
 package hu.bme.aut.tactic.model
 
-enum class ROUND {INIT,FIRST_BASE, SEC_BASE, GAME, DRAW, BLUE_WIN, RED_WIN}
+enum class ROUND {FIRST_BASE, SEC_BASE, GAME}
 
 enum class PLAYER {
     RED, BLUE

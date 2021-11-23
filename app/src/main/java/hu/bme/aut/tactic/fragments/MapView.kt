@@ -5,14 +5,12 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import hu.bme.aut.tactic.interfaces.GameInterface
 import hu.bme.aut.tactic.model.*
 import kotlin.math.ceil
 
-val MIN_CELL_SIZE = 80f
 
 @SuppressLint("ResourceAsColor")
 class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
@@ -24,7 +22,7 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
     private var cellHeight = 0F
     private var correct = 9F
 
-    private var game: GameInterface = MapViewHelper.game
+    private var game: GameInterface = GameHelper.game
 
 
     private lateinit var canvas: Canvas
@@ -34,7 +32,6 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
         game.setMapView(this)
         mapWidth = game.getMapWidth()
         mapHeight = game.getMapHeight()
-        Log.d("Bugfix", "Mapview size $mapWidth:$mapHeight")
 
         paint.style = Paint.Style.FILL
         paint.strokeWidth = 6F
@@ -163,8 +160,6 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
             else -> return
 
         }
-
-        Log.d("Bugfix", "~~~~~~~~~~~~~~~$cellWidth : $cellHeight")
 
         val textSize =
             if(cellHeight < cellWidth)

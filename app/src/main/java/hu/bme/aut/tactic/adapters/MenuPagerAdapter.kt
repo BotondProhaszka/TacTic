@@ -2,10 +2,7 @@ package hu.bme.aut.tactic.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import hu.bme.aut.tactic.data.Score
 import hu.bme.aut.tactic.data.ScoresDatabase
 import hu.bme.aut.tactic.fragments.MainMenuFragment
 import hu.bme.aut.tactic.fragments.RulesFragment

@@ -2,7 +2,6 @@ package hu.bme.aut.tactic.activities
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -10,7 +9,6 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import com.google.android.material.tabs.TabLayoutMediator
 import hu.bme.aut.tactic.R
@@ -18,7 +16,6 @@ import hu.bme.aut.tactic.adapters.MenuPagerAdapter
 import hu.bme.aut.tactic.adapters.ScoresAdapter
 import hu.bme.aut.tactic.data.ScoresDatabase
 import hu.bme.aut.tactic.databinding.ActivityMenuBinding
-import kotlin.concurrent.thread
 
 class MenuActivity : AppCompatActivity() {
 

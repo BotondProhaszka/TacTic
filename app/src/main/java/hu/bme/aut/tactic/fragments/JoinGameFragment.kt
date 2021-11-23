@@ -14,13 +14,10 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import hu.bme.aut.tactic.adapters.JoinGameAdapter
 import hu.bme.aut.tactic.databinding.JoinGameFragmentBinding
-import kotlin.concurrent.thread
 import com.google.firebase.database.DatabaseError
-
 import com.google.firebase.database.DataSnapshot
 import hu.bme.aut.tactic.activities.GameActivity
 import hu.bme.aut.tactic.model.*
-import kotlin.random.Random
 
 
 class JoinGameFragment: Fragment(), JoinGameAdapter.JoinGameClickListener{
@@ -97,8 +94,6 @@ class JoinGameFragment: Fragment(), JoinGameAdapter.JoinGameClickListener{
     }
 
     override fun onOnlineHostLobbyClicked(onlineHostLobby: OnlineHostLobby) {
-
-        Log.d("Bugfix", "Clicked: ${onlineHostLobby.getConnString()}")
         val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
         onlineHostLobby.joinPlayerName = sp.getString("PLAYER_NAME", "Red Player").toString()
         val editor: SharedPreferences.Editor = sp.edit()
@@ -110,8 +105,6 @@ class JoinGameFragment: Fragment(), JoinGameAdapter.JoinGameClickListener{
         database.getReference("lobbies").child(onlineHostLobby.lobbyName).setValue(onlineHostLobby)
         OnlineGame.setMyColor(PLAYER.RED)
         OnlineGame.setMapSize(onlineHostLobby.width, onlineHostLobby.height)
-        Log.d("Bugfix", "Clicked2: ${onlineHostLobby.getConnString()}")
-
         val onlineGameTransferObj = OnlineGameTransferObj(0, 0, 0)
 
         database.getReference("gameRooms").child(onlineHostLobby.getConnString()).setValue(onlineGameTransferObj)

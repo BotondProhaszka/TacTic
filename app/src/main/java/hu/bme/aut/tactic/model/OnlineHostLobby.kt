@@ -1,6 +1,5 @@
 package hu.bme.aut.tactic.model
 
-import java.util.*
 
 class OnlineHostLobby(val lobbyName: String, val hostPlayerName: String, val width: Int, val height: Int, val firstPlayer: PLAYER) {
     var joinPlayerName: String = ""

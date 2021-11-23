@@ -3,25 +3,15 @@ package hu.bme.aut.tactic.dialogs
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.preference.PreferenceManager
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.content.ContextCompat.startActivity
-import androidx.fragment.app.DialogFragment
-import hu.bme.aut.tactic.R
 import hu.bme.aut.tactic.activities.MenuActivity
 import hu.bme.aut.tactic.data.Score
 import hu.bme.aut.tactic.databinding.RestartGameDialogBinding
 import hu.bme.aut.tactic.model.Game
-import java.lang.Exception
-import kotlin.concurrent.thread
 
 class RestartGameDialog(context: Context, private var score: Score): Dialog(context) {
 
@@ -34,7 +24,6 @@ class RestartGameDialog(context: Context, private var score: Score): Dialog(cont
         initTextViews()
 
         binding.btnRestart.setOnClickListener{
-            Log.d("Bugfix", "btnRestart clicked")
             Game.getInstance().restartGame()
             dismiss()
         }

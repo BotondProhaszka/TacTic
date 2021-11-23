@@ -1,12 +1,9 @@
 package hu.bme.aut.tactic.adapters
 
-import android.annotation.SuppressLint
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import hu.bme.aut.tactic.R
 import hu.bme.aut.tactic.data.Score
 import hu.bme.aut.tactic.databinding.ScoreRowBinding
 import hu.bme.aut.tactic.model.PLAYER
