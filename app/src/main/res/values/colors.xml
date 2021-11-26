@@ -6,6 +6,7 @@
     <color name="sec_background">#BAA896</color>
     <color name="text_color">#32384D</color>
     <color name="button_normal">#BC6D4F</color>
+    <color name="button_disabled">#41BC6D4F</color>
 
 
     <color name="main_color">#BC6D4F</color>

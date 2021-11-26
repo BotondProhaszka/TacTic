@@ -21,4 +21,5 @@ interface GameInterface {
     fun closeGameRoom()
     fun getFirstPlayer() : PLAYER?
     fun gameOver(winner: PLAYER?)
+    fun isOnline(): Boolean
 }

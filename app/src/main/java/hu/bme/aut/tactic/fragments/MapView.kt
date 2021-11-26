@@ -140,7 +140,7 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
         val x = field.x
         val y = field.y
 
-        var sign = ""
+        var sign: String
         when (field.sign) {
             SIGN.ONE -> {
                 sign = "1"

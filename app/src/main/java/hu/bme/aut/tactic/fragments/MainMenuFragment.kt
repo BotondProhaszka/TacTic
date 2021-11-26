@@ -1,5 +1,6 @@
 package hu.bme.aut.tactic.fragments
 
+ import android.annotation.SuppressLint
  import android.content.Context
  import android.content.Intent
  import android.net.ConnectivityManager
@@ -10,6 +11,7 @@ package hu.bme.aut.tactic.fragments
  import android.view.View
  import android.view.ViewGroup
  import androidx.fragment.app.Fragment
+ import hu.bme.aut.tactic.R
  import hu.bme.aut.tactic.activities.NewOnlineGameActivity
  import hu.bme.aut.tactic.databinding.MainMenuFragmentBinding
  import hu.bme.aut.tactic.dialogs.NewOfflineGameDialog
@@ -48,7 +50,7 @@ class MainMenuFragment : Fragment() {
         binding.btnOnline.isEnabled = isNetworkAvailable(this.context)
     }
 
-    fun isNetworkAvailable(context: Context?): Boolean {
+    private fun isNetworkAvailable(context: Context?): Boolean {
         if (context == null) return false
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

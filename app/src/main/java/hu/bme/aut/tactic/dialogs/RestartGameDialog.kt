@@ -5,13 +5,16 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.opengl.Visibility
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat.startActivity
 import hu.bme.aut.tactic.activities.MenuActivity
 import hu.bme.aut.tactic.data.Score
 import hu.bme.aut.tactic.databinding.RestartGameDialogBinding
 import hu.bme.aut.tactic.model.Game
+import hu.bme.aut.tactic.model.GameHelper
 
 class RestartGameDialog(context: Context, private var score: Score): Dialog(context) {
 
@@ -23,8 +26,12 @@ class RestartGameDialog(context: Context, private var score: Score): Dialog(cont
         setContentView(binding.root)
         initTextViews()
 
+        if(GameHelper.game.isOnline()){
+            binding.btnRestart.visibility = View.GONE
+        }
+
         binding.btnRestart.setOnClickListener{
-            Game.getInstance().restartGame()
+            Game.restartGame()
             dismiss()
         }
 
@@ -41,11 +48,9 @@ class RestartGameDialog(context: Context, private var score: Score): Dialog(cont
         super.onStart()
         this.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         val dialog: Dialog = this
-        if (dialog != null) {
-            val width = ViewGroup.LayoutParams.MATCH_PARENT
-            val height = ViewGroup.LayoutParams.MATCH_PARENT
-            dialog.window?.setLayout(width, height)
-        }
+        val width = ViewGroup.LayoutParams.MATCH_PARENT
+        val height = ViewGroup.LayoutParams.MATCH_PARENT
+        dialog.window?.setLayout(width, height)
     }
 
     private fun initTextViews(){

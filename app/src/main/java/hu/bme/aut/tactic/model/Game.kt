@@ -28,7 +28,6 @@ object Game: GameInterface {
     private var actual_player: PLAYER = PLAYER.BLUE
     private lateinit var bluePlayer: PlayerUser
     private lateinit var redPlayer: PlayerUser
-    //private var score = Score(null, "Player1Name", 1, "Player2Name", 2, true)
 
     fun getInstance(): Game = instance
 
@@ -40,7 +39,7 @@ object Game: GameInterface {
     override fun getBluePlayersName() : String = bluePlayer.name.toString()
     override fun getRedPlayersName() : String = redPlayer.name.toString()
 
-    fun getActualPlayerUser() : PlayerUser {
+    private fun getActualPlayerUser() : PlayerUser {
         return if(actual_player == PLAYER.BLUE)
             bluePlayer
         else
@@ -166,6 +165,8 @@ object Game: GameInterface {
         restartGame()
         gameActivity.gameOver(score)
     }
+
+    override fun isOnline(): Boolean = false
 
     override fun clickedOn(x: Int, y: Int) {
         if (round != ROUND.FIRST_BASE && round != ROUND.SEC_BASE)

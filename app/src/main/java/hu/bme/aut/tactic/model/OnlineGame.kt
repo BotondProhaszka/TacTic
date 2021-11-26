@@ -44,16 +44,20 @@ object OnlineGame : GameInterface {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     synchronized (this) {
                         try {
-                            val onlineGameTransferObj = snapshot.getValue(OnlineGameTransferObj::class.java) ?: return
-                            if(snapshot.value == null)
-                                GameHelper.game.gameOver(null)
-                            if (onlineGameTransferObj.x == 0 || onlineGameTransferObj.y == 0)
+                            val onlineGameTransferObj = snapshot.getValue(OnlineGameTransferObj::class.java)
+                            if(onlineGameTransferObj == null){
+                                gameOver(null)
                                 return
-                            clickedCounter = onlineGameTransferObj.id
-                            clickedFromOnline = true
-                            if(clickedCounter - 1 == Game.getInstance().getClickCounter())
-                                clickedOn(onlineGameTransferObj.x, onlineGameTransferObj.y)
-                            repeat = Game.getActualPlayer() == myColor
+                            }
+                            else {
+                                if (onlineGameTransferObj.x == 0 || onlineGameTransferObj.y == 0)
+                                    return
+                                clickedCounter = onlineGameTransferObj.id
+                                clickedFromOnline = true
+                                if (clickedCounter - 1 == Game.getInstance().getClickCounter())
+                                    clickedOn(onlineGameTransferObj.x, onlineGameTransferObj.y)
+                                repeat = Game.getActualPlayer() == myColor
+                            }
                         } catch (e: Exception) {
                             Log.e("Bugfix", "OnlineGame listener: ${e.message}")
                         }
@@ -89,6 +93,8 @@ object OnlineGame : GameInterface {
         Game.gameOver(winner)
         closeGameRoom()
     }
+
+    override fun isOnline(): Boolean = true
 
     private fun uploadStep(x: Int, y: Int){
         val ogto =
