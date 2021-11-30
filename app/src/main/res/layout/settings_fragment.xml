@@ -137,14 +137,6 @@
                 app:layout_constraintGuide_percent="0.75" />
 
             <ImageButton
-                android:id="@+id/ibLanguage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_outline_language_24" />
-
-            <ImageButton
                 android:id="@+id/ibNightmode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -161,7 +153,7 @@
                 android:textAlignment="center"
                 android:textSize="15sp"
                 android:maxLength="17"
-                android:text="@string/playername"
+                android:text="@string/player_name"
                 app:layout_constraintBottom_toTopOf="@+id/btnApply"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

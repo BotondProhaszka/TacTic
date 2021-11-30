@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import hu.bme.aut.tactic.activities.MenuActivity
 import hu.bme.aut.tactic.databinding.SettingsFragmentBinding
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import kotlin.collections.ArrayList
 import kotlin.random.Random
 
 
@@ -25,6 +27,7 @@ class SettingsDialog: DialogFragment(), AdapterView.OnItemSelectedListener{
     private var spinXValue = 5
     private val intArray = ArrayList<Int>()
     private var spinYValue = 5
+
 
 
     override fun onCreateView(
@@ -143,4 +146,23 @@ class SettingsDialog: DialogFragment(), AdapterView.OnItemSelectedListener{
         binding.etPlayerName.setText(sp.getString("PLAYER_NAME", "guestPlayer$rndNumb"))
 
     }
+
+    private fun changeLang(){
+        val change: String
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(parentFragment?.requireContext())
+        val language = sharedPreferences.getString("language", "hu")
+        change = if (language == "hu") {
+            "en"
+        } else {
+            "hu"
+        }
+        try {
+            //TODO: Change Language
+        }
+        catch (e: Exception){
+            Log.e("Bugfix", "${e.message}")
+        }
+    }
+
+
 }

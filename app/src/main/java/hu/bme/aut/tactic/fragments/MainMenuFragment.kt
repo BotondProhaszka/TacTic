@@ -1,6 +1,5 @@
 package hu.bme.aut.tactic.fragments
 
- import android.annotation.SuppressLint
  import android.content.Context
  import android.content.Intent
  import android.net.ConnectivityManager
@@ -11,7 +10,6 @@ package hu.bme.aut.tactic.fragments
  import android.view.View
  import android.view.ViewGroup
  import androidx.fragment.app.Fragment
- import hu.bme.aut.tactic.R
  import hu.bme.aut.tactic.activities.NewOnlineGameActivity
  import hu.bme.aut.tactic.databinding.MainMenuFragmentBinding
  import hu.bme.aut.tactic.dialogs.NewOfflineGameDialog
@@ -23,7 +21,7 @@ package hu.bme.aut.tactic.fragments
 class MainMenuFragment : Fragment() {
     private lateinit var binding: MainMenuFragmentBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = MainMenuFragmentBinding.inflate(inflater, container, false)
 
         binding.btnOffline.setOnClickListener {

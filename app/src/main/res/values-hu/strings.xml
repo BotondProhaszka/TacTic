@@ -31,10 +31,24 @@
     <string name="scoreboard">Dicsőségtábla</string>
     <string name="reload">Reload</string>
     <string name="online_rooms">Online rooms</string>
-    <string name="playername">PlayerName</string>
+    <string name="player_name">PlayerName</string>
     <string name="blue">Kék:</string>
     <string name="red">Piros:</string>
     <string name="home">Menü</string>
     <string name="rules">Szabályok</string>
+
+    <string-array name="rules">
+        <item>A játék célja elfoglalni az ellenfél bázisát</item>
+        <item>Az első körben a játékosok kiválasztják a bázisok helyét</item>
+        <item>Egy körben három akció közül lehet egyet végrehajtani</item>
+        <item>1) Üres cellát elfoglalni</item>
+        <item>2) Ellenfelet támadni</item>
+        <item>3) Saját cella értékét növelni</item>
+        <item>Üres cella foglalása: csak szomszédos cellát lehet fogalni</item>
+        <item>Ellenfél támadása: csak szomszédos mezőt lehet támadni, és csak olyan mezőt, aminek nem nagyobb az értke. Támadás után a két cella különbsége lesz az elfoglalt mező értéke. A saját cella értéke is csökken.</item>
+        <item>A cellák max értéke 6</item>
+        <item>Az ellenfél bázisát csak szomszédos, legalább 2 értékű mezőről lehet elfoglalni.</item>
+        <item>Jó játékot!</item>
+    </string-array>
 
 </resources>
