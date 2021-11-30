@@ -19,6 +19,7 @@ class RulesFragment : Fragment() {
     private var counter = 0
     private val rules = mutableListOf<String>()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,12 +35,7 @@ class RulesFragment : Fragment() {
         } catch (e: Exception){
             Log.e("Bugfix", "${e.message}")
         }
-        return binding.root
-    }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onResume() {
-        super.onResume()
         val res: Resources = requireActivity().resources
         val rulesTemp = res.getStringArray(R.array.rules)
         rules.clear()
@@ -48,7 +44,10 @@ class RulesFragment : Fragment() {
         binding.tvRule.text = rules[0]
         binding.ibBack.isEnabled = false
         initProgressBar()
+
+        return binding.root
     }
+
 
     private fun getNextRule(){
         counter += 1
