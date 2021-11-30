@@ -52,7 +52,7 @@ class MenuActivity : AppCompatActivity() {
             }
         }.attach()
 
-
+        Thread.sleep(400)
         setContentView(binding.root)
     }
 

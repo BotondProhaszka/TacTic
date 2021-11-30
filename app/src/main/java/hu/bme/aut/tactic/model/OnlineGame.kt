@@ -54,8 +54,9 @@ object OnlineGame : GameInterface {
                                     return
                                 clickedCounter = onlineGameTransferObj.id
                                 clickedFromOnline = true
-                                if (clickedCounter - 1 == Game.getInstance().getClickCounter())
+                                if (clickedCounter - 1 == Game.getInstance().getClickCounter()) {
                                     clickedOn(onlineGameTransferObj.x, onlineGameTransferObj.y)
+                                }
                                 repeat = Game.getActualPlayer() == myColor
                             }
                         } catch (e: Exception) {
@@ -75,8 +76,8 @@ object OnlineGame : GameInterface {
             when {
                 //Ha nálam jön
                 myColor == Game.getInstance().getActualPlayer() -> {
-                    Game.getInstance().clickedOn(x, y)
                     uploadStep(x, y)
+                    Game.getInstance().clickedOn(x, y)
                 }
                 //Ha online jött és még nem léptem le
                 clickedFromOnline && (clickedCounter - 1 == Game.getInstance().getClickCounter()) -> {
@@ -90,8 +91,11 @@ object OnlineGame : GameInterface {
 
 
     override fun gameOver(winner: PLAYER?){
-        Game.gameOver(winner)
-        closeGameRoom()
+        synchronized(this) {
+            if (Game.isGameOver())
+                return
+            Game.gameOver(winner)
+        }
     }
 
     override fun isOnline(): Boolean = true
@@ -99,7 +103,7 @@ object OnlineGame : GameInterface {
     private fun uploadStep(x: Int, y: Int){
         val ogto =
             OnlineGameTransferObj(
-                id = Game.getInstance().getClickCounter(),
+                id = Game.getInstance().getClickCounter() + 1,
                 x = x,
                 y = y
             )

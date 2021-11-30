@@ -71,7 +71,7 @@ class GameActivity : AppCompatActivity() {
             database.scoreDao().insert(score)
         }
         RestartGameDialog(this, score).show()
-        game.closeGameRoom()
+        GameHelper.game.closeGameRoom()
     }
 
     @SuppressLint("InflateParams")

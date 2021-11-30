@@ -19,6 +19,7 @@ import hu.bme.aut.tactic.databinding.SettingsFragmentBinding
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import kotlin.collections.ArrayList
+import kotlin.concurrent.fixedRateTimer
 import kotlin.random.Random
 
 
@@ -76,9 +77,7 @@ class SettingsDialog: DialogFragment(), AdapterView.OnItemSelectedListener{
             spinYValue = intArray[p2]
     }
 
-    override fun onNothingSelected(p0: AdapterView<*>?) {
-        TODO("Not yet implemented")
-    }
+    override fun onNothingSelected(p0: AdapterView<*>?) { }
 
     private fun initSpinners(){
         for(i in 4..9){
@@ -102,9 +101,12 @@ class SettingsDialog: DialogFragment(), AdapterView.OnItemSelectedListener{
         val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
         val editor: SharedPreferences.Editor = sp.edit()
 
-
         binding.ibNightmode.setOnClickListener {
-            when (sp.getBoolean("NIGHT_MODE", false)) {
+
+            val isDark = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
+            Log.d("Bugfix", "$isDark")
+
+            when (sp.getBoolean("NIGHT_MODE", isDark)) {
                 true -> {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                     binding.ibNightmode.setImageResource(R.drawable.ic_outline_brightness_low_24)
@@ -146,23 +148,4 @@ class SettingsDialog: DialogFragment(), AdapterView.OnItemSelectedListener{
         binding.etPlayerName.setText(sp.getString("PLAYER_NAME", "guestPlayer$rndNumb"))
 
     }
-
-    private fun changeLang(){
-        val change: String
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(parentFragment?.requireContext())
-        val language = sharedPreferences.getString("language", "hu")
-        change = if (language == "hu") {
-            "en"
-        } else {
-            "hu"
-        }
-        try {
-            //TODO: Change Language
-        }
-        catch (e: Exception){
-            Log.e("Bugfix", "${e.message}")
-        }
-    }
-
-
 }

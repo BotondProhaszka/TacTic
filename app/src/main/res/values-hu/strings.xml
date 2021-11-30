@@ -44,7 +44,7 @@
         <item>1) Üres cellát elfoglalni</item>
         <item>2) Ellenfelet támadni</item>
         <item>3) Saját cella értékét növelni</item>
-        <item>Üres cella foglalása: csak szomszédos cellát lehet fogalni</item>
+        <item>Üres cella foglalása: csak szomszédos cellát lehet foglalni</item>
         <item>Ellenfél támadása: csak szomszédos mezőt lehet támadni, és csak olyan mezőt, aminek nem nagyobb az értke. Támadás után a két cella különbsége lesz az elfoglalt mező értéke. A saját cella értéke is csökken.</item>
         <item>A cellák max értéke 6</item>
         <item>Az ellenfél bázisát csak szomszédos, legalább 2 értékű mezőről lehet elfoglalni.</item>

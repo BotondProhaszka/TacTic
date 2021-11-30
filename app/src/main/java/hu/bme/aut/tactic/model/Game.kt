@@ -3,6 +3,7 @@ package hu.bme.aut.tactic.model
 
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import android.util.Log
 import hu.bme.aut.tactic.interfaces.GameInterface
 import hu.bme.aut.tactic.activities.GameActivity
 import hu.bme.aut.tactic.data.Score
@@ -21,6 +22,7 @@ object Game: GameInterface {
 
     private var clickCounter = 0
 
+    private var isGameOver = false
 
     private var mapWidth = 0
     private var mapHeight = 0
@@ -47,7 +49,7 @@ object Game: GameInterface {
     }
 
     override fun startNewGame(firstPlayer: PLAYER?) {
-
+        isGameOver = false
         if(firstPlayer == null)
             setRandomFirstPlayer()
         else
@@ -152,7 +154,12 @@ object Game: GameInterface {
         }
     }
 
+    fun isGameOver(): Boolean = isGameOver
+
     override fun gameOver(winner: PLAYER?) {
+        if(isGameOver)
+            return
+        isGameOver = true
         val score = Score(
             id = null,
             player1Name = bluePlayer.name,

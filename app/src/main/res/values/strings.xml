@@ -38,17 +38,17 @@
     <string name="rules">Rules</string>
 
     <string-array name="rules">
-        <item>A játék célja elfoglalni az ellenfél bázisát</item>
-        <item>Az első körben a játékosok kiválasztják a bázisok helyét</item>
-        <item>Egy körben három akció közül lehet egyet végrehajtani</item>
-        <item>1) Üres cellát elfoglalni</item>
-        <item>2) Ellenfelet támadni</item>
-        <item>3) Saját cella értékét növelni</item>
-        <item>Üres cella foglalása: csak szomszédos cellát lehet fogalni</item>
-        <item>Ellenfél támadása: csak szomszédos mezőt lehet támadni, és csak olyan mezőt, aminek nem nagyobb az értke. Támadás után a két cella különbsége lesz az elfoglalt mező értéke. A saját cella értéke is csökken.</item>
-        <item>A cellák max értéke 6</item>
-        <item>Az ellenfél bázisát csak szomszédos, legalább 2 értékű mezőről lehet elfoglalni.</item>
-        <item>Jó játékot!</item>
+        <item>The object of the game is to occupy your opponent\'s base</item>
+        <item>In the first round, players choose the location of the base</item>
+        <item>One of three actions can be performed in a round</item>
+        <item>1) Occupy an empty cell</item>
+        <item>2) Attack the opponent</item>
+        <item>3) Increase the value one of your cell</item>
+        <item>Occupy an empty cell: Only adjacent cells can be occupied</item>
+        <item>Attack the opponent: Only an adjacent field can be attacked, and only a field with no greater value. After an attack, the difference between the two cells will be the value of the occupied field. The value of your own cell also decreases.</item>
+        <item>The max value of the cells is 6</item>
+        <item>The opponent\'s base can only be occupied from an adjacent cell with a value of at least 2.</item>
+        <item>Have fun!</item>
     </string-array>
 
 
