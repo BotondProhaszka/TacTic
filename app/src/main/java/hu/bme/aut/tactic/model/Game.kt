@@ -152,6 +152,9 @@ object Game: GameInterface {
         if(isGameOver)
             return
         isGameOver = true
+
+        setRandomFirstPlayer()
+
         val score = Score(
             id = null,
             player1Name = bluePlayer.name,

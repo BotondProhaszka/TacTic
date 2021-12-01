@@ -42,7 +42,7 @@ class GameActivity : AppCompatActivity() {
 
 
             game.setGameActivity(this)
-            game.startNewGame(null)
+            game.startNewGame(GameHelper.game.getFirstPlayer())
 
             initMapView()
 
