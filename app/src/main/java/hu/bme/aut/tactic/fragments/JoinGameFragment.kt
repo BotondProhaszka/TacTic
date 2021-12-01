@@ -23,7 +23,7 @@ import hu.bme.aut.tactic.model.*
 class JoinGameFragment: Fragment(), JoinGameAdapter.JoinGameClickListener{
     private lateinit var binding: JoinGameFragmentBinding
     private lateinit var adapter: JoinGameAdapter
-    private var database = FirebaseDatabase.getInstance("https://tactic-add7c-default-rtdb.europe-west1.firebasedatabase.app/")
+    private var database = FirebaseDatabase.getInstance(FIREBASE_CONN_STRING)
     private var games : ArrayList<OnlineHostLobby> = ArrayList()
 
     private var firstLoad = true
@@ -95,16 +95,15 @@ class JoinGameFragment: Fragment(), JoinGameAdapter.JoinGameClickListener{
 
     override fun onOnlineHostLobbyClicked(onlineHostLobby: OnlineHostLobby) {
         val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
-        onlineHostLobby.joinPlayerName = sp.getString("PLAYER_NAME", "Red Player").toString()
+        onlineHostLobby.joinPlayerName = sp.getString(SP_PLAYER_NAME, "Red Player").toString()
         val editor: SharedPreferences.Editor = sp.edit()
-        editor.putInt("MAP_WIDTH_VAL", onlineHostLobby.width)
-        editor.putInt("MAP_HEIGHT_VAL", onlineHostLobby.height)
+        editor.putInt(SP_MAP_SIZE_VAL, onlineHostLobby.size)
         editor.apply()
         Game.getInstance().setSharedPreferences(sp)
         OnlineGame.setLobby(onlineHostLobby)
         database.getReference("lobbies").child(onlineHostLobby.lobbyName).setValue(onlineHostLobby)
         OnlineGame.setMyColor(PLAYER.RED)
-        OnlineGame.setMapSize(onlineHostLobby.width, onlineHostLobby.height)
+        OnlineGame.setMapSize(onlineHostLobby.size)
         val onlineGameTransferObj = OnlineGameTransferObj(0, 0, 0)
 
         database.getReference("gameRooms").child(onlineHostLobby.getConnString()).setValue(onlineGameTransferObj)

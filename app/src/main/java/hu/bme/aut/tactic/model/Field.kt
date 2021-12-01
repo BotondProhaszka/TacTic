@@ -47,7 +47,6 @@ class Field(var x: Int, var y: Int) {
         return true
     }
 
-    //fun isEmpty() : Boolean {return (player == null)}
 
     fun attackFrom(from: Field): Boolean{
         if(this.player == from.player)

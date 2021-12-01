@@ -18,16 +18,19 @@ import hu.bme.aut.tactic.activities.MenuActivity
 import hu.bme.aut.tactic.databinding.SettingsFragmentBinding
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import hu.bme.aut.tactic.model.SP_MAP_SIZE_POS
+import hu.bme.aut.tactic.model.SP_MAP_SIZE_VAL
+import hu.bme.aut.tactic.model.SP_NIGHT_MODE
+import hu.bme.aut.tactic.model.SP_PLAYER_NAME
+import java.lang.Exception
 import kotlin.collections.ArrayList
-import kotlin.concurrent.fixedRateTimer
 import kotlin.random.Random
 
 
 class SettingsDialog: DialogFragment(), AdapterView.OnItemSelectedListener{
     private lateinit var binding: SettingsFragmentBinding
-    private var spinXValue = 5
+    private var spinValue = 5
     private val intArray = ArrayList<Int>()
-    private var spinYValue = 5
 
 
 
@@ -36,25 +39,22 @@ class SettingsDialog: DialogFragment(), AdapterView.OnItemSelectedListener{
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = SettingsFragmentBinding.inflate(inflater, container, false)
 
+        binding = SettingsFragmentBinding.inflate(inflater, container, false)
         initTheme()
         setThemeListener()
         initSpinners()
         initPlayerName()
 
-        binding.btnApply.setOnClickListener{
+        binding.btnApply.setOnClickListener {
             val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
             val editor: SharedPreferences.Editor = sp.edit()
-            editor.putInt("MAP_WIDTH_POS", binding.spinnerX.selectedItemPosition)
-            editor.putInt("MAP_HEIGHT_POS", binding.spinnerY.selectedItemPosition)
-            editor.putInt("MAP_WIDTH_VAL", binding.spinnerX.selectedItem as Int)
-            editor.putInt("MAP_HEIGHT_VAL", binding.spinnerY.selectedItem as Int)
-            editor.putString("PLAYER_NAME", binding.etPlayerName.text.toString())
+            editor.putInt(SP_MAP_SIZE_POS, binding.spinner.selectedItemPosition)
+            editor.putInt(SP_MAP_SIZE_VAL, binding.spinner.selectedItem as Int)
+            editor.putString(SP_PLAYER_NAME, binding.etPlayerName.text.toString())
             editor.apply()
             dialog?.dismiss()
         }
-
 
         return binding.root
     }
@@ -71,30 +71,24 @@ class SettingsDialog: DialogFragment(), AdapterView.OnItemSelectedListener{
     }
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-        if(p0?.id == R.id.spinnerX)
-            spinXValue = intArray[p2]
-        else if(p0?.id == R.id.spinnerY)
-            spinYValue = intArray[p2]
+        if(p0?.id == R.id.spinner)
+            spinValue = intArray[p2]
     }
 
     override fun onNothingSelected(p0: AdapterView<*>?) { }
 
     private fun initSpinners(){
-        for(i in 4..9){
+        for(i in 4..20){
             intArray.add(i)
         }
         val aa = ArrayAdapter(this.requireContext(), R.layout.spinner_item, intArray)
-        binding.spinnerX.adapter = aa
-        binding.spinnerY.adapter = aa
-        binding.spinnerX.onItemSelectedListener = this
-        binding.spinnerY.onItemSelectedListener = this
+        binding.spinner.adapter = aa
+        binding.spinner.onItemSelectedListener = this
 
         val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
-        val xPos = sp.getInt("MAP_WIDTH_POS", 0)
-        val yPos = sp.getInt("MAP_HEIGHT_POS", 0)
+        val pos = sp.getInt(SP_MAP_SIZE_POS, 0)
 
-        binding.spinnerX.setSelection(xPos)
-        binding.spinnerY.setSelection(yPos)
+        binding.spinner.setSelection(pos)
     }
 
     private fun setThemeListener(){
@@ -104,19 +98,18 @@ class SettingsDialog: DialogFragment(), AdapterView.OnItemSelectedListener{
         binding.ibNightmode.setOnClickListener {
 
             val isDark = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
-            Log.d("Bugfix", "$isDark")
 
-            when (sp.getBoolean("NIGHT_MODE", isDark)) {
+            when (sp.getBoolean(SP_NIGHT_MODE, isDark)) {
                 true -> {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                     binding.ibNightmode.setImageResource(R.drawable.ic_outline_brightness_low_24)
-                    editor.putBoolean("NIGHT_MODE", false)
+                    editor.putBoolean(SP_NIGHT_MODE, false)
                     editor.apply()
                 }
                 false -> {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                     binding.ibNightmode.setImageResource(R.drawable.ic_twotone_brightness_3_24)
-                    editor.putBoolean("NIGHT_MODE", true)
+                    editor.putBoolean(SP_NIGHT_MODE, true)
                     editor.apply()
                 }
             }
@@ -130,7 +123,7 @@ class SettingsDialog: DialogFragment(), AdapterView.OnItemSelectedListener{
     private fun initTheme(){
         val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
 
-        when (sp.getBoolean("NIGHT_MODE", true)) {
+        when (sp.getBoolean(SP_NIGHT_MODE, true)) {
             true -> {
                 binding.ibNightmode.setImageResource(R.drawable.ic_outline_brightness_low_24)
             }
@@ -143,9 +136,7 @@ class SettingsDialog: DialogFragment(), AdapterView.OnItemSelectedListener{
 
     private fun initPlayerName(){
         val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
-
         val rndNumb = Random.nextInt(1000000)
-        binding.etPlayerName.setText(sp.getString("PLAYER_NAME", "guestPlayer$rndNumb"))
-
+        binding.etPlayerName.setText(sp.getString(SP_PLAYER_NAME, "guestPlayer$rndNumb"))
     }
 }

@@ -16,6 +16,8 @@ import hu.bme.aut.tactic.adapters.MenuPagerAdapter
 import hu.bme.aut.tactic.adapters.ScoresAdapter
 import hu.bme.aut.tactic.data.ScoresDatabase
 import hu.bme.aut.tactic.databinding.ActivityMenuBinding
+import hu.bme.aut.tactic.model.SP_NAME
+import hu.bme.aut.tactic.model.SP_NIGHT_MODE
 
 class MenuActivity : AppCompatActivity() {
 
@@ -31,7 +33,7 @@ class MenuActivity : AppCompatActivity() {
 
         initTheme()
 
-        sharedPreferences = getSharedPreferences("myPref", Context.MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
         editor = sharedPreferences.edit()
 
 
@@ -59,7 +61,7 @@ class MenuActivity : AppCompatActivity() {
 
     private fun initTheme(){
         val sp = PreferenceManager.getDefaultSharedPreferences(this)
-        when (sp.getBoolean("NIGHT_MODE", true)) {
+        when (sp.getBoolean(SP_NIGHT_MODE, true)) {
             false -> {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }

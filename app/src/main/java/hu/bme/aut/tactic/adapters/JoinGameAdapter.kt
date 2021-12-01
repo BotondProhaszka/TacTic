@@ -19,8 +19,8 @@ class JoinGameAdapter (private val listener: JoinGameClickListener) :
     override fun onBindViewHolder(holder: JoinGameViewHolder, position: Int) {
         val onlineHostLobby = items[position]
         holder.binding.tvLobbyName.text = onlineHostLobby.lobbyName
-        holder.binding.tvWidth.text = onlineHostLobby.width.toString()
-        holder.binding.tvHeight.text = onlineHostLobby.height.toString()
+        holder.binding.tvWidth.text = onlineHostLobby.size.toString()
+        holder.binding.tvHeight.text = onlineHostLobby.size.toString()
         holder.binding.joinRow.setOnClickListener {
             listener.onOnlineHostLobbyClicked(onlineHostLobby)
         }

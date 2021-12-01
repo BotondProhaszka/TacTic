@@ -3,7 +3,6 @@ package hu.bme.aut.tactic.model
 
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import android.util.Log
 import hu.bme.aut.tactic.interfaces.GameInterface
 import hu.bme.aut.tactic.activities.GameActivity
 import hu.bme.aut.tactic.data.Score
@@ -25,7 +24,6 @@ object Game: GameInterface {
     private var isGameOver = false
 
     private var mapWidth = 0
-    private var mapHeight = 0
     private var round: ROUND = ROUND.FIRST_BASE
     private var actual_player: PLAYER = PLAYER.BLUE
     private lateinit var bluePlayer: PlayerUser
@@ -54,13 +52,10 @@ object Game: GameInterface {
             setRandomFirstPlayer()
         else
             actual_player = firstPlayer
-
         round = ROUND.FIRST_BASE
         val spr = PreferenceManager.getDefaultSharedPreferences(gameActivity.getContext())
-        val x = spr.getInt("MAP_WIDTH_VAL", 5)
-        val y = spr.getInt("MAP_HEIGHT_VAL", 5)
-
-        setMap(x, y)
+        val x = spr.getInt(SP_MAP_SIZE_VAL, 5)
+        setMap(x)
     }
 
     override fun getScore(): Score {
@@ -69,20 +64,21 @@ object Game: GameInterface {
 
     fun restartGame() {
         round = ROUND.FIRST_BASE
-        setMap(mapWidth, mapHeight)
+        setMap(mapWidth)
         setRandomFirstPlayer()
         bluePlayer.score = 0
         redPlayer.score = 0
+        isGameOver = false
+        mapView.invalidate()
     }
 
-    private fun setMap(width: Int, height: Int) {
+    private fun setMap(size: Int) {
 
-        mapWidth = width
-        mapHeight = height
+        mapWidth = size
         map = ArrayList()
-        for (i in 0..width) {
-            val row = ArrayList<Field>(height)
-            for (j in 0..height) {
+        for (i in 0..size) {
+            val row = ArrayList<Field>(size)
+            for (j in 0..size) {
                 row.add(Field(i, j))
             }
             map.add(row)
@@ -116,9 +112,6 @@ object Game: GameInterface {
         return mapWidth
     }
 
-    override fun getMapHeight(): Int {
-        return mapHeight
-    }
 
     override fun closeGameRoom() { }
     override fun getFirstPlayer(): PLAYER? {
@@ -136,9 +129,8 @@ object Game: GameInterface {
     fun getClickCounter() : Int = clickCounter
 
 
-    fun setMapSize(x: Int, y: Int){
-        mapWidth = x
-        mapHeight = y
+    fun setMapSize(size : Int){
+        mapWidth = size
     }
 
     private fun playerStepped() {
@@ -169,7 +161,6 @@ object Game: GameInterface {
             offlineGame = true,
             winner = winner
         )
-        restartGame()
         gameActivity.gameOver(score)
     }
 
@@ -191,6 +182,8 @@ object Game: GameInterface {
                 return
             }
             ROUND.SEC_BASE -> {
+                if(map[x][y].getPlayer() != null)
+                    return
                 map[x][y] = Field(x, y, actual_player, SIGN.BASE, false)
                 playerStepped()
                 round = ROUND.GAME
@@ -245,10 +238,10 @@ object Game: GameInterface {
         if (x in 1 until mapWidth)
             if (map[x + 1][y].getPlayer() == actual_player)
                 return true
-        if (y in 2..mapHeight)
+        if (y in 2..mapWidth)
             if (map[x][y - 1].getPlayer() == actual_player)
                 return true
-        if (y in 1 until mapHeight)
+        if (y in 1 until mapWidth)
             if (map[x][y + 1].getPlayer() == actual_player)
                 return true
         return false

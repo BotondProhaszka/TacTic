@@ -36,6 +36,7 @@
     <string name="red">Red:</string>
     <string name="home">Home</string>
     <string name="rules">Rules</string>
+    <string name="diduforget">Did you forget to type the name?</string>
 
     <string-array name="rules">
         <item>The object of the game is to occupy your opponent\'s base</item>

@@ -13,13 +13,14 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import hu.bme.aut.tactic.R
 import hu.bme.aut.tactic.activities.GameActivity
 import hu.bme.aut.tactic.databinding.HostGameFragmentBinding
 import hu.bme.aut.tactic.model.*
 
 class HostGameFragment: Fragment() {
     private lateinit var binding: HostGameFragmentBinding
-    private var database = FirebaseDatabase.getInstance("https://tactic-add7c-default-rtdb.europe-west1.firebasedatabase.app/")
+    private var database = FirebaseDatabase.getInstance(FIREBASE_CONN_STRING)
     private lateinit var onlineHostLobby: OnlineHostLobby
 
     override fun onCreateView(
@@ -58,7 +59,7 @@ class HostGameFragment: Fragment() {
 
     private fun host() {
         if (binding.etHostGameName.text.isEmpty()) {
-            Toast.makeText(this.context, "Did you forget to type the name?", Toast.LENGTH_LONG).show()
+            Toast.makeText(this.context, R.string.diduforget, Toast.LENGTH_LONG).show()
             return
         }
         onlineHostLobby = initOnlineHostLobby()
@@ -80,16 +81,15 @@ class HostGameFragment: Fragment() {
 
     private fun initOnlineHostLobby() : OnlineHostLobby{
         val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
-        val width = sp.getInt("MAP_WIDTH_VAL", 5)
-        val height = sp.getInt("MAP_HEIGHT_VAL", 5)
-        val playerName = sp.getString("PLAYER_NAME", "host player").toString()
+        val size = sp.getInt(SP_MAP_SIZE_VAL, 5)
+        val playerName = sp.getString(SP_PLAYER_NAME, "host player").toString()
 
         val randFirstPlayer = when ((0..1).random()) {
             0 -> PLAYER.BLUE
             1 -> PLAYER.RED
             else -> PLAYER.BLUE
         }
-        return OnlineHostLobby(binding.etHostGameName.text.toString(), playerName, width, height, randFirstPlayer)
+        return OnlineHostLobby(binding.etHostGameName.text.toString(), playerName, size, randFirstPlayer)
     }
 
     private fun initJoinListener(){

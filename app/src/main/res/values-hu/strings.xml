@@ -36,6 +36,8 @@
     <string name="red">Piros:</string>
     <string name="home">Menü</string>
     <string name="rules">Szabályok</string>
+    <string name="diduforget">Csak nem elfelejtetted beírni a nevet?</string>
+
 
     <string-array name="rules">
         <item>A játék célja elfoglalni az ellenfél bázisát</item>

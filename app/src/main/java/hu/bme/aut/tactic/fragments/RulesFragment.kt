@@ -29,7 +29,6 @@ class RulesFragment : Fragment() {
         binding = RulesFragmentBinding.inflate(inflater)
 
         try {
-            //binding.tvRule.text = rules[0].toString()
             binding.ibNext.setOnClickListener { getNextRule() }
             binding.ibBack.setOnClickListener { getPrevRule() }
         } catch (e: Exception){

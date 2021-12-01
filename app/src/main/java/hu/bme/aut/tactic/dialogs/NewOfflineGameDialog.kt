@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
+import hu.bme.aut.tactic.R
 import hu.bme.aut.tactic.activities.GameActivity
 import hu.bme.aut.tactic.activities.MenuActivity
 import hu.bme.aut.tactic.databinding.NewOfflineGameDialogBinding
@@ -28,7 +29,7 @@ class NewOfflineGameDialog(context: Context) : Dialog(context){
 
         binding.btnStart.setOnClickListener {
             if (binding.etNameBlue.text.isEmpty() || binding.etNameRed.text.isEmpty()) {
-                Toast.makeText(this.context, "Did you forget to type your name?", Toast.LENGTH_LONG).show()
+                Toast.makeText(this.context, R.string.diduforget, Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             } else {
                 Game.getInstance().setPlayers(

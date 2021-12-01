@@ -42,7 +42,7 @@ class GameActivity : AppCompatActivity() {
 
 
             game.setGameActivity(this)
-            game.startNewGame(game.getFirstPlayer())
+            game.startNewGame(null)
 
             initMapView()
 
@@ -84,6 +84,4 @@ class GameActivity : AppCompatActivity() {
 
 
     fun getContext(): Context = this
-
-
 }

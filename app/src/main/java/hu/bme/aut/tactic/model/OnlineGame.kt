@@ -14,7 +14,7 @@ import hu.bme.aut.tactic.fragments.MapView
 object OnlineGame : GameInterface {
 
     private lateinit var lobby: OnlineHostLobby
-    private val database = FirebaseDatabase.getInstance("https://tactic-add7c-default-rtdb.europe-west1.firebasedatabase.app/")
+    private val database = FirebaseDatabase.getInstance(FIREBASE_CONN_STRING)
 
     private lateinit var myColor : PLAYER
     private lateinit var onlinePlayerName: String
@@ -32,7 +32,7 @@ object OnlineGame : GameInterface {
         Game.getInstance().startNewGame(firstPlayer)
         Game.getInstance().setPlayers(lobby.hostPlayerName, lobby.joinPlayerName)
         val sp = PreferenceManager.getDefaultSharedPreferences(Game.getInstance().getGameActivity().getContext())
-        onlinePlayerName = sp.getString("PLAYER_NAME", "Anonymous").toString()
+        onlinePlayerName = sp.getString(SP_PLAYER_NAME, "Anonymous").toString()
         setOnlineListener()
     }
 
@@ -143,10 +143,9 @@ object OnlineGame : GameInterface {
 
     override fun getMapWidth(): Int = Game.getInstance().getMapWidth()
 
-    override fun getMapHeight(): Int = Game.getInstance().getMapHeight()
 
-    fun setMapSize(width: Int, height: Int){
-        Game.getInstance().setMapSize(width, height)
+    fun setMapSize(size: Int){
+        Game.getInstance().setMapSize(size)
     }
 
     override fun closeGameRoom(){

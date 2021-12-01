@@ -7,11 +7,12 @@ import com.google.firebase.database.FirebaseDatabase
 import hu.bme.aut.tactic.R
 import hu.bme.aut.tactic.adapters.OnlineLobbyAdapter
 import hu.bme.aut.tactic.databinding.ActivityNewOnlineGameBinding
+import hu.bme.aut.tactic.model.FIREBASE_CONN_STRING
 
 class NewOnlineGameActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityNewOnlineGameBinding
-    private val database = FirebaseDatabase.getInstance("https://tactic-add7c-default-rtdb.europe-west1.firebasedatabase.app/")
+    private val database = FirebaseDatabase.getInstance(FIREBASE_CONN_STRING)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
