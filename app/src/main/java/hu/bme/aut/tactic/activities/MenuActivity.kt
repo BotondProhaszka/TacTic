@@ -18,6 +18,7 @@ import hu.bme.aut.tactic.data.ScoresDatabase
 import hu.bme.aut.tactic.databinding.ActivityMenuBinding
 import hu.bme.aut.tactic.model.SP_NAME
 import hu.bme.aut.tactic.model.SP_NIGHT_MODE
+import kotlin.system.exitProcess
 
 class MenuActivity : AppCompatActivity() {
 
@@ -76,7 +77,7 @@ class MenuActivity : AppCompatActivity() {
             .setMessage(R.string.r_u_sure_u_want_to_quit)
             .setPositiveButton(R.string.ok) { _, _ ->
                 run {
-
+                    finishAffinity()
                 }
             }
             .setNegativeButton(R.string.cancel, null)

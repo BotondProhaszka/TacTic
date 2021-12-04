@@ -37,6 +37,8 @@
     <string name="home">Menü</string>
     <string name="rules">Szabályok</string>
     <string name="diduforget">Csak nem elfelejtetted beírni a nevet?</string>
+    <string name="map_size">Pályaméret</string>
+
 
 
     <string-array name="rules">

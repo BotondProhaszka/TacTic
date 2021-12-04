@@ -18,14 +18,10 @@ object OnlineGame : GameInterface {
 
     private lateinit var myColor : PLAYER
     private lateinit var onlinePlayerName: String
-
-
     private var clickedFromOnline = false
     private var clickedCounter = 0
 
     private var repeat = false
-
-
 
 
     override fun startNewGame(firstPlayer: PLAYER?) {
@@ -35,8 +31,6 @@ object OnlineGame : GameInterface {
         onlinePlayerName = sp.getString(SP_PLAYER_NAME, "Anonymous").toString()
         setOnlineListener()
     }
-
-
 
     private fun setOnlineListener() {
         database.getReference("gameRooms").child(lobby.getConnString())

@@ -37,6 +37,7 @@
     <string name="home">Home</string>
     <string name="rules">Rules</string>
     <string name="diduforget">Did you forget to type the name?</string>
+    <string name="map_size">Map size</string>
 
     <string-array name="rules">
         <item>The object of the game is to occupy your opponent\'s base</item>
@@ -44,7 +45,7 @@
         <item>One of three actions can be performed in a round</item>
         <item>1) Occupy an empty cell</item>
         <item>2) Attack the opponent</item>
-        <item>3) Increase the value one of your cell</item>
+        <item>3) Increase the value of one your cells</item>
         <item>Occupy an empty cell: Only adjacent cells can be occupied</item>
         <item>Attack the opponent: Only an adjacent field can be attacked, and only a field with no greater value. After an attack, the difference between the two cells will be the value of the occupied field. The value of your own cell also decreases.</item>
         <item>The max value of the cells is 6</item>

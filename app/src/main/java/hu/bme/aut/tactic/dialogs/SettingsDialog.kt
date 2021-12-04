@@ -92,31 +92,36 @@ class SettingsDialog: DialogFragment(), AdapterView.OnItemSelectedListener{
     }
 
     private fun setThemeListener(){
-        val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
-        val editor: SharedPreferences.Editor = sp.edit()
+        try {
+            val sp = PreferenceManager.getDefaultSharedPreferences(this.context)
+            val editor: SharedPreferences.Editor = sp.edit()
 
-        binding.ibNightmode.setOnClickListener {
+            binding.ibNightmode.setOnClickListener {
 
-            val isDark = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
+                val isDark =
+                    AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
 
-            when (sp.getBoolean(SP_NIGHT_MODE, isDark)) {
-                true -> {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                    binding.ibNightmode.setImageResource(R.drawable.ic_outline_brightness_low_24)
-                    editor.putBoolean(SP_NIGHT_MODE, false)
-                    editor.apply()
+                when (sp.getBoolean(SP_NIGHT_MODE, isDark)) {
+                    true -> {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                        binding.ibNightmode.setImageResource(R.drawable.ic_outline_brightness_low_24)
+                        editor.putBoolean(SP_NIGHT_MODE, false)
+                        editor.apply()
+                    }
+                    false -> {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                        binding.ibNightmode.setImageResource(R.drawable.ic_twotone_brightness_3_24)
+                        editor.putBoolean(SP_NIGHT_MODE, true)
+                        editor.apply()
+                    }
                 }
-                false -> {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                    binding.ibNightmode.setImageResource(R.drawable.ic_twotone_brightness_3_24)
-                    editor.putBoolean(SP_NIGHT_MODE, true)
-                    editor.apply()
-                }
+                val intent = Intent(this.context, MenuActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+
             }
-            val intent = Intent(this.context, MenuActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-
+        } catch (e: Exception){
+            Log.e("Bugfix", "Settings: ${e.message}")
         }
     }
 
