@@ -50,8 +50,7 @@ object OnlineGame : GameInterface {
                                 clickedFromOnline = true
                                 if (clickedCounter - 1 == Game.getInstance().getClickCounter()) {
                                     clickedOn(onlineGameTransferObj.x, onlineGameTransferObj.y)
-                                }
-                                repeat = Game.getActualPlayer() == myColor
+                                } else { }
                             }
                         } catch (e: Exception) {
                             Log.e("Bugfix", "OnlineGame listener: ${e.message}")

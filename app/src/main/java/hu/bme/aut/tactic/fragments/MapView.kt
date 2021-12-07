@@ -24,7 +24,6 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
 
     private var game: GameInterface = GameHelper.game
 
-
     private lateinit var canvas: Canvas
 
     init {
@@ -37,7 +36,6 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
         paint.strokeWidth = 6F
         invalidate()
     }
-
 
     @SuppressLint("ResourceAsColor")
     override fun onDraw(canvas: Canvas) {
@@ -85,9 +83,6 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
                 draw(f)
     }
 
-
-
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         super.onTouchEvent(event)
@@ -106,16 +101,15 @@ class MapView (context: Context?, attrs: AttributeSet?) : View(context, attrs){
                 val x = ceil(xTemp.toDouble()).toInt()
                 val y = ceil(yTemp.toDouble()).toInt()
                 if(x <= mapWidth && y <= mapHeight && x > 0 && y > 0) {
-                    game.clickedOn(x,y)
+                    synchronized(this) {
+                        game.clickedOn(x, y)
+                    }
                     this.invalidate()
                 }
             }
         }
         return true
     }
-
-
-
 
     @SuppressLint("ResourceAsColor")
     private fun draw(field: Field) {
